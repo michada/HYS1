@@ -4,14 +4,11 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.web.filter.RequestContextFilter;
 
-import es.uvigo.esei.daa.rest.PeopleResource;
-import es.uvigo.esei.daa.rest.SubjectResource;
-
-public class DAAExampleApplication extends ResourceConfig {
-	public DAAExampleApplication() {
+public class HYS1Application extends ResourceConfig {
+	public HYS1Application() {
 		// register application resources
-		register(PeopleResource.class);
-		register(SubjectResource.class);
+		//register(PeopleResource.class);
+		//register(SubjectResource.class);
 		
 		// register filters
 		// which is a Spring filter that provides a bridge between JAX-RS and Spring request attributes

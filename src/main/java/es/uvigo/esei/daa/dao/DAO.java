@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 public abstract class DAO {
 	private final static Logger LOG = Logger.getLogger("DAO");
-	private final static String JNDI_NAME = "java:/comp/env/jdbc/daaexample"; 
+	private final static String JNDI_NAME = "java:/comp/env/jdbc/hys1"; 
 	
 	private final DataSource dataSource;
 	
