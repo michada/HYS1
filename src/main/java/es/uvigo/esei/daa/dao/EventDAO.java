@@ -20,7 +20,7 @@ public class EventDAO extends DAO {
 
 	public List<Event> getPublicEvents() {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from event e where e.visibility = 'PUBLIC'";
+		String hql = "from Event e where e.visibility = 'PUBLIC'";
 		Query query = session.createQuery(hql);
 		List<Event> eventList = query.list();
 		return eventList;

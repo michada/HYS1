@@ -9,7 +9,7 @@
 	<div class="intro-margin"></div>
 	<div class="content-section-a">
 		<div class="container">
-			<form action="list.jsp" method="POST">
+			<form action="showEvents.jsp" method="POST">
 				<fieldset>
 				<legend>Login</legend>
 				<div class="row">

@@ -1,37 +1,37 @@
 (function () {
-    var app = angular.module("people", []);
+    var app = angular.module("event", []);
 
     app.config(['$sceDelegateProvider', function ($sceDelegateProvider) {
         $sceDelegateProvider.resourceUrlWhitelist(['self', '/**'])
     }]);
 
-    app.controller('peopleController', ['$scope', '$http', function ($scope, $http) {
-        $scope.people = [];
+    app.controller('eventController', ['$scope', '$http', function ($scope, $http) {
+        $scope.event = [];
         $scope.isEditing = false;
-        $scope.personInForm = {};
+        $scope.eventInForm = {};
 
-        $scope.getPeopleData = function () {
-            $http.get('/HYS1/rest/people')
+        $scope.getEventData = function () {
+            $http.get('/HYS1/rest/event')
                 .success(function (data) {
-                    $scope.people = data;
+                    $scope.event = data;
                 })
                 .error(function () {
-                    alert("People listing ERROR");
+                    alert("Event listing ERROR");
                 });
         };
 
-        $scope.getPeopleData();
+        $scope.getEventData();
 
         $scope.resetForm = function () {
-            $scope.personInForm = {};
+            $scope.eventInForm = {};
             $scope.isEditing = false;
         }
 
         $scope.edit = function (id) {
-            for (var i = 0; i < $scope.people.length; i++) {
-                elem = $scope.people[i];
+            for (var i = 0; i < $scope.event.length; i++) {
+                elem = $scope.event[i];
                 if (elem.id == id) {
-                    $scope.personInForm = Object.assign({}, elem);
+                    $scope.eventInForm = Object.assign({}, elem);
                     $scope.isEditing = true;
                     break;
                 }
@@ -39,11 +39,11 @@
         };
 
         $scope.delete = function (id) {
-            if (confirm("Are you sure to remove person with id = " + id + " ?")) {
-                $http.delete('/HYS1/rest/people/' + id)
+            if (confirm("Are you sure to remove event with id = " + id + " ?")) {
+                $http.delete('/HYS1/rest/event/' + id)
                     .success(function (data) {
                         $scope.resetForm();
-                        $scope.getPeopleData();
+                        $scope.getEventData();
                     })
                     .error(function (data) {
                         alert("Delete error");
@@ -56,15 +56,15 @@
                 alert("Form incomplete");
             }
             else {
-                $http.put('/HYS1/rest/people/' + $scope.personInForm.id,
+                $http.put('/HYS1/rest/event/' + $scope.eventInForm.id,
                     {
-                        id: $scope.personInForm.id,
-                        name: $scope.personInForm.name,
-                        surname: $scope.personInForm.surname
+                        id: $scope.eventInForm.id,
+                        date: $scope.eventInForm.name,
+                        description: $scope.eventInForm.surname
                     })
                     .success(function (data) {
                     	$scope.resetForm();
-                        $scope.getPeopleData();
+                        $scope.getEventData();
                     })
                     .error(function (data) {
                         alert("Update error");
@@ -77,15 +77,15 @@
                 alert("Form incomplete");
             }
             else {
-                $http.post('/HYS1/rest/people/',
+                $http.post('/HYS1/rest/event/',
                     {
-                        name: $scope.personInForm.name,
-                        surname: $scope.personInForm.surname
+                        date: $scope.eventInForm.name,
+                        description: $scope.eventInForm.surname
                     })
 
                     .success(function (data) {
                         $scope.resetForm();
-                        $scope.getPeopleData();
+                        $scope.getEventData();
                     })
                     .error(function (data) {
                         alert("Insert error");
@@ -94,8 +94,8 @@
         };
 
         $scope.isFormIncomplete = function () {
-            return $scope.personInForm.name == "" || $scope.personInForm.surname == ""
-                || $scope.personInForm.name == null || $scope.personInForm.surname == null;
+            return $scope.eventInForm.name == "" || $scope.eventInForm.surname == ""
+                || $scope.eventInForm.name == null || $scope.eventInForm.surname == null;
         };
     }]);
 })();

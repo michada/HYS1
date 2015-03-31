@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,8 +27,8 @@ public class CulturalElement implements Serializable {
 	private String title;
 	private String description;
 	private String image;
-	@OneToMany(mappedBy = "culturalElement")
-	private List<Event> eventsAboutMe;
+	//@OneToMany(fetch=FetchType.EAGER, mappedBy = "culturalElement")
+	//private List<Event> eventsAboutMe;
 
 	public CulturalElement() {
 
@@ -65,13 +66,13 @@ public class CulturalElement implements Serializable {
 		this.id = id;
 	}
 
-	public List<Event> getEventsAboutMe() {
-		return eventsAboutMe;
-	}
-
-	public void setEventsAboutMe(List<Event> eventsAboutMe) {
-		this.eventsAboutMe = eventsAboutMe;
-	}
+//	public List<Event> getEventsAboutMe() {
+//		return eventsAboutMe;
+//	}
+//
+//	public void setEventsAboutMe(List<Event> eventsAboutMe) {
+//		this.eventsAboutMe = eventsAboutMe;
+//	}
 	
 
 }
