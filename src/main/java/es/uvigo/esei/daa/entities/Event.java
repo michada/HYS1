@@ -35,6 +35,10 @@ public class Event implements Serializable {
 
 	}
 	
+	public enum Visibility {
+		PUBLIC, PRIVATE
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -46,6 +50,8 @@ public class Event implements Serializable {
 	private Date date;
 	@Enumerated(EnumType.STRING)
 	private EventStatus status;
+	@Enumerated(EnumType.STRING)
+	private Visibility visibility;
 	@ManyToOne
 	private CulturalElement culturalElement;
 	@ManyToOne
