@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.dao.UsersDAO;
 
-@WebFilter(urlPatterns = { "/*", "/logout" })
+@WebFilter(urlPatterns = { "/login", "/logout" })
 public class LoginFilter implements Filter {
 	@Override
 	public void doFilter(
@@ -53,7 +53,7 @@ public class LoginFilter implements Filter {
 	}
 	
 	private boolean isIndexPath(HttpServletRequest request) {
-		return request.getServletPath().equals("/index.html");
+		return request.getServletPath().equals("/index.jsp");
 	}
 	
 	private boolean isRestPath(HttpServletRequest request) {

@@ -11,7 +11,7 @@
         $scope.personInForm = {};
 
         $scope.getPeopleData = function () {
-            $http.get('/HYS1/rest/people')
+            $http.get('/DAAExample/rest/people')
                 .success(function (data) {
                     $scope.people = data;
                 })
@@ -36,11 +36,12 @@
                     break;
                 }
             }
+            
         };
 
         $scope.delete = function (id) {
             if (confirm("Are you sure to remove person with id = " + id + " ?")) {
-                $http.delete('/HYS1/rest/people/' + id)
+                $http.delete('/DAAExample/rest/people/' + id)
                     .success(function (data) {
                         $scope.resetForm();
                         $scope.getPeopleData();
@@ -56,7 +57,7 @@
                 alert("Form incomplete");
             }
             else {
-                $http.put('/HYS1/rest/people/' + $scope.personInForm.id,
+                $http.put('/DAAExample/rest/people/' + $scope.personInForm.id,
                     {
                         id: $scope.personInForm.id,
                         name: $scope.personInForm.name,
@@ -77,7 +78,7 @@
                 alert("Form incomplete");
             }
             else {
-                $http.post('/HYS1/rest/people/',
+                $http.post('/DAAExample/rest/people/',
                     {
                         name: $scope.personInForm.name,
                         surname: $scope.personInForm.surname
