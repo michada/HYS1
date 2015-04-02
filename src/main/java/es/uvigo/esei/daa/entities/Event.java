@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,11 +20,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.OnDelete;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Component
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name="event")
 public class Event implements Serializable {
 
@@ -52,7 +57,7 @@ public class Event implements Serializable {
 	private EventStatus status;
 	@Enumerated(EnumType.STRING)
 	private Visibility visibility;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private CulturalElement culturalElement;
 	@ManyToOne
 	private Personality personality;

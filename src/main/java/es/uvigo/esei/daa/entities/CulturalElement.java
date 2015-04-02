@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +13,14 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Component
 @Table(name = "culturalElement")
 public class CulturalElement implements Serializable {
@@ -27,8 +33,9 @@ public class CulturalElement implements Serializable {
 	private String title;
 	private String description;
 	private String image;
-	//@OneToMany(fetch=FetchType.EAGER, mappedBy = "culturalElement")
-	//private List<Event> eventsAboutMe;
+	
+	@OneToMany(mappedBy = "culturalElement")
+	private List<Event> eventsAboutMe;
 
 	public CulturalElement() {
 
@@ -66,13 +73,11 @@ public class CulturalElement implements Serializable {
 		this.id = id;
 	}
 
-//	public List<Event> getEventsAboutMe() {
-//		return eventsAboutMe;
-//	}
-//
-//	public void setEventsAboutMe(List<Event> eventsAboutMe) {
-//		this.eventsAboutMe = eventsAboutMe;
-//	}
-	
+	public List<Event> getEventsAboutMe() {
+		return eventsAboutMe;
+	}
 
+	public void setEventsAboutMe(List<Event> eventsAboutMe) {
+		this.eventsAboutMe = eventsAboutMe;
+	}
 }

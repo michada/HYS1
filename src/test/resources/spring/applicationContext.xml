@@ -33,10 +33,12 @@
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/daaexampletest"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/hys1test"/>
 		<property name="username" value="daa"/>
 		<property name="password" value="daa"/>
 	</bean>
+
+	
 
 	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton">
 	    <property name="jndiName" value="java:comp/env/jdbc/daaexample" />

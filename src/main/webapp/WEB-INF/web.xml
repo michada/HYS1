@@ -20,6 +20,30 @@
 		</listener-class>
 	</listener>
 	
+	<filter>
+     	<filter-name>hibernateFilter</filter-name>
+     	<filter-class>
+         	org.springframework.orm.hibernate4.support.OpenSessionInViewFilter
+     	</filter-class>
+     	<init-param>
+        	<param-name>sessionFactoryBeanName</param-name>
+         	<param-value>sessionFactory</param-value> 
+     	</init-param>
+ 	</filter>
+ 	<filter-mapping>
+    	<filter-name>hibernateFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+ 	</filter-mapping>
+	
+	<!--<filter>
+		<filter-name>OpenEntityManagerInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>OpenEntityManagerInViewFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+	
 	<context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:spring/applicationContext.xml</param-value>
