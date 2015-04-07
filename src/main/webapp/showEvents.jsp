@@ -12,25 +12,29 @@
 	<div class="intro-margin"></div>
 	<div class="content-section-a">
 		<div class="container">
-			<div ng-repeat="e in events" class="row event-info">
-				<div class="col-md-6">
-					<h2>{{e.title}}</h2>
-					<h3><small>{{e.description}}</small></h3>
-					<p>
-						<b>Date:</b> {{e.date | date}}
-					</p>
-					<p>
-						<b>State:</b> {{e.status}}
-					<p>
-				</div>
-				<div class="col-md-6">
-					<img width="150" class="img-rounded img-responsive" height="150" src="http://lorempixel.com/150/150/" alt="" style="z-index:0;position:absolute;" />
-					<img ng-if="e.status == 'CANCELED'" width="200" height="150" src="img/cancelled-event.png" style="z-index:1;position:absolute;margin-left:-25px" >
-				</div>
-				<div class="col-md-8">
-					<hr>
-				</div>
+			<div class="navigation">
+				<ul class="nav menu nav-pills">
+					<li><button type="button" class="btn btn-primary">Filtrar</button></li>
+				</ul>
 			</div>
+			<table class="table table-striped">
+				<tr ng-repeat="e in events">
+					<td class="vcenter">
+						<div class="pull-left">
+							<h2>{{e.title}}</h2>
+							<h3><small>{{e.description}}</small></h3>
+							<p><b>Date:</b> {{e.date | date}}</p>
+							<p><b>State:</b> {{e.status}}</p>
+						</div>
+					</td>
+					<td class="vcenter">
+						<div class="pull-right">
+							<img class="img-rounded img-responsive img-event" src="http://lorempixel.com/150/150/" ng-if="e.status != 'CANCELED'" />
+							<img class="img-rounded img-responsive img-event img-canceled" src="img/cancelled-event.png" ng-if="e.status == 'CANCELED'" />
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 	<%@ include file="imports/footer.jsp"%>

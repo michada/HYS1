@@ -119,7 +119,23 @@ p.copyright {
     margin: 15px 0 0;
 }
 
-.first-row {
-	background-color: black !important;
-    color: white !important;
+.navigation {
+	background-color: #f8f8f8;
+    border: 1px solid rgba(0, 0, 0, 0.075);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.vcenter {
+	vertical-align: center !important;
+}
+
+.img-event {
+	height:150px;
+	width:150px;
+}
+
+.img-canceled {
+	background: url(http://lorempixel.com/150/150/) center center no-repeat;
 }
