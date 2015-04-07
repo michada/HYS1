@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Component
 @Table(name = "culturalElement")
 public class CulturalElement implements Serializable {
@@ -35,6 +35,7 @@ public class CulturalElement implements Serializable {
 	private String image;
 	
 	@OneToMany(mappedBy = "culturalElement")
+	@JsonManagedReference
 	private List<Event> eventsAboutMe;
 
 	public CulturalElement() {
