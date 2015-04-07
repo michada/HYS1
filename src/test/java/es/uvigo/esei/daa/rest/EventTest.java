@@ -33,7 +33,7 @@ import org.springframework.web.filter.RequestContextFilter;
 
 import es.uvigo.esei.daa.TestUtils;
 import es.uvigo.esei.daa.entities.Event;
-import es.uvigo.esei.daa.services.pojo.EventPojo;
+import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
@@ -98,8 +98,8 @@ public class EventTest extends JerseyTest {
 		final Response response = target("event").request().get();
 		assertOkStatus(response);
 
-		final List<EventPojo> events = response
-				.readEntity(new GenericType<List<EventPojo>>() {
+		final List<PublicEventPojo> events = response
+				.readEntity(new GenericType<List<PublicEventPojo>>() {
 				});
 		assertEquals(1, events.size());
 	}

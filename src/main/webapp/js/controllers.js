@@ -7,6 +7,11 @@
 
     app.controller('eventController', ['$scope', '$http', function ($scope, $http) {
         $scope.events = [];
+        $scope.showEvents = {
+        		programmed: true,
+        		completed: true,
+        		cancelled: true
+        };
 
         $scope.getEventData = function () {
             $http.get('/HYS1/rest/event')
@@ -19,6 +24,11 @@
         };
 
         $scope.getEventData();
-
+        
+        $scope.isShown = function(e){
+        	return (e.status == 'COMPLETED' && $scope.showEvents.completed) || 
+			(e.status == 'PROGRAMMED' && $scope.showEvents.programmed) || 
+			(e.status == 'CANCELLED' && $scope.showEvents.cancelled);
+        };
     }]);
 })();

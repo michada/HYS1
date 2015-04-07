@@ -128,7 +128,7 @@ p.copyright {
 }
 
 .vcenter {
-	vertical-align: center !important;
+	vertical-align: middle !important;
 }
 
 .img-event {
@@ -136,6 +136,6 @@ p.copyright {
 	width:150px;
 }
 
-.img-canceled {
+.img-cancelled {
 	background: url(http://lorempixel.com/150/150/) center center no-repeat;
 }
