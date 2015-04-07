@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -58,10 +59,13 @@ public class Event implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Visibility visibility;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference
 	private CulturalElement culturalElement;
 	@ManyToOne
+	@JsonBackReference
 	private Personality personality;
 	@ManyToOne
+	@JsonBackReference
 	@NotNull
 	private User creator;
 	@ManyToMany
@@ -71,6 +75,7 @@ public class Event implements Serializable {
 	@JoinTable(name = "event_assistants", inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> assistants;
 	@ManyToOne
+	@JsonBackReference
 	@NotNull
 	private Location location;
 	
