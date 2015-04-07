@@ -11,16 +11,16 @@
 	<div class="intro-margin"></div>
 	<div class="content-section-a">
 		<div class="container">
-			<table class="table table-hover text-center" id="people-list">
+			<table class="table table-hover text-center" id="event-list">
 				<tr class="first-row">
 					<td>Id</td>
-					<td>Name</td>
-					<td>Surname</td>
+					<td>Date</td>
+					<td>Title</td>
 				</tr>
-				<tr ng-repeat="e in event">
+				<tr ng-repeat="e in events">
 					<td>{{e.id}}</th>
 					<td>{{e.date}}</th>
-					<td>{{e.description}}</th>
+					<td>{{e.title}}</th>
 				</tr>
 			</table>
 		</div>
