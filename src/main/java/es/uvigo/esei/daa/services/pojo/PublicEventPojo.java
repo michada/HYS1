@@ -5,7 +5,7 @@ import java.util.Date;
 
 import es.uvigo.esei.daa.entities.Event;
 
-public class EventPojo implements Serializable {
+public class PublicEventPojo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -14,19 +14,19 @@ public class EventPojo implements Serializable {
 	private String description;
 	private Date date;
 	private String status;
-	private String visibility;
 	private int numAssistants;
 	
-	public EventPojo(){
+	public PublicEventPojo(){
 		
 	}
 	
-	public EventPojo(Event event) {
+	public PublicEventPojo(Event event) {
 		this.id = event.getId();
 		this.title = event.getTitle();
 		this.description = event.getDescription();
 		this.date = event.getDate();
 		this.status = event.getStatus().toString();
+		this.numAssistants = event.getNumAssistants();
 		// Falta visibility
 		// Falta numassitants
 	}
@@ -69,14 +69,6 @@ public class EventPojo implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getVisibility() {
-		return visibility;
-	}
-
-	public void setVisibility(String visibility) {
-		this.visibility = visibility;
 	}
 
 	public int getNumAssistants() {

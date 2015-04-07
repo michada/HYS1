@@ -52,12 +52,13 @@ public class Event implements Serializable {
 	private String title;
 	private String description;
 	@NotNull
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date date;
 	@Enumerated(EnumType.STRING)
 	private EventStatus status;
 	@Enumerated(EnumType.STRING)
 	private Visibility visibility;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonBackReference
 	private CulturalElement culturalElement;
@@ -172,4 +173,15 @@ public class Event implements Serializable {
 	}
 	
 
+	public Visibility getVisibility() {
+		return visibility;
+	}
+	
+	public void setVisibility(Visibility visibility) {
+		this.visibility = visibility;
+	}
+	
+	public int getNumAssistants(){
+		return assistants.size();
+	}
 }
