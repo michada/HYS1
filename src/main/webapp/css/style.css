@@ -139,3 +139,9 @@ p.copyright {
 .img-cancelled {
 	background: url(http://lorempixel.com/150/150/) center center no-repeat;
 }
+
+.vcheck {
+	display: table-cell;
+	vertical-align: bottom;	
+}
+}
