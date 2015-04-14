@@ -1,40 +1,59 @@
-(function () {
-    var app = angular.module("event", []);
+(function() {
+	var app = angular.module("event", []);
 
-    app.config(['$sceDelegateProvider', function ($sceDelegateProvider) {
-        $sceDelegateProvider.resourceUrlWhitelist(['self', '/**'])
-    }]);
+	app.config([ '$sceDelegateProvider', function($sceDelegateProvider) {
+		$sceDelegateProvider.resourceUrlWhitelist([ 'self', '/**' ])
+	} ]);
 
-    app.controller('eventController', ['$scope', '$http', function ($scope, $http) {
-        $scope.events = [];
-        $scope.showEvents = {
-        		programmed: true,
-        		completed: false,
-        		cancelled: true
-        };
+	app
+			.controller(
+					'eventController',
+					[
+							'$scope',
+							'$http',
+							function($scope, $http, $routeParams) {
+								$scope.events = [];
+								$scope.showEvents = {
+									programmed : true,
+									completed : false,
+									cancelled : true
+								};
 
-        $scope.getEventData = function () {
-            $http.get('rest/event')
-                .success(function (data) {
-                    $scope.events = data;
-                })
-                .error(function () {
-                    alert("Event listing ERROR");
-                });
-        };
+								$scope.getEventData = function() {
+									$http.get('rest/event').success(
+											function(data) {
+												$scope.events = data;
+											}).error(function() {
+										alert("Event listing ERROR");
+									});
+								};
 
-        $scope.getEventData();
-        
-        $scope.isShown = function(e){
-        	return (e.status == 'COMPLETED' && $scope.showEvents.completed) || 
-			(e.status == 'PROGRAMMED' && $scope.showEvents.programmed) || 
-			(e.status == 'CANCELLED' && $scope.showEvents.cancelled);
-        };
-    }]);
-    
-    
-    
-    
-    
-    
+								$scope.getEventData();
+
+								$scope.isShown = function(e) {
+									return (e.status == 'COMPLETED' && $scope.showEvents.completed)
+											|| (e.status == 'PROGRAMMED' && $scope.showEvents.programmed)
+											|| (e.status == 'CANCELLED' && $scope.showEvents.cancelled);
+								};
+								
+								$scope.getUrlVars = function getUrlVars()
+								{
+								    var vars = [], hash;
+								    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+								    for(var i = 0; i < hashes.length; i++)
+								    {
+								        hash = hashes[i].split('=');
+								        vars.push(hash[0]);
+								        vars[hash[0]] = hash[1];
+								    }
+								    return vars;
+								};
+
+								$scope.loginFail = false;
+								if ($scope.getUrlVars()["fail"] == "true"){
+									$scope.loginFail = true;
+								}
+								
+							} ]);
+
 })();

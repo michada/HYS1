@@ -3,8 +3,6 @@
 <head>
 <%@ include file="imports/head.jsp"%>
 <title>List - Have You Seen?</title>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.3/angular.min.js"></script>
-<script src="js/controllers.js"></script>
 </head>
 <body ng-controller="eventController">
 	<%@ include file="imports/menu.jsp"%>

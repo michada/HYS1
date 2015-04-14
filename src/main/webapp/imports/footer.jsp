@@ -14,3 +14,5 @@
 </footer>
 <script src="js/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.3/angular.min.js"></script>
+<script src="js/controllers.js"></script>
