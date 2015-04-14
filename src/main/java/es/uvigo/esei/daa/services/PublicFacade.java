@@ -7,19 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.dao.EventDAO;
+import es.uvigo.esei.daa.dao.UserDAO;
 import es.uvigo.esei.daa.entities.Event;
+import es.uvigo.esei.daa.services.pojo.AllEventPojo;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 
 @Service
 @Transactional
 public class PublicFacade {
 	@Autowired
-	private EventDAO dao;
+	private EventDAO eventDao;
+	
+	@Autowired
+	private UserDAO userDao;
 
-	public List<PublicEventPojo> getEventList() throws FacadeException {
+	public List<PublicEventPojo> getPublicEventList() throws FacadeException {
 		List<Event> list = null;
-		list = dao.getPublicEvents();
+		list = eventDao.getPublicEvents();
 		
 		List<PublicEventPojo> listEventPojo = new ArrayList<PublicEventPojo>();
 		for (Event event: list) {
@@ -28,5 +34,28 @@ public class PublicFacade {
 		}
 		
 		return listEventPojo;
+	}
+	
+	public List<AllEventPojo> getAllEventList() throws FacadeException {
+		List<Event> list = null;
+		list = eventDao.getAllEvents();
+		
+		List<AllEventPojo> listEventPojo = new ArrayList<AllEventPojo>();
+		for (Event event: list) {
+			AllEventPojo pojo = new AllEventPojo(event);
+			listEventPojo.add(pojo);
+		}
+		
+		return listEventPojo;
+	}
+	
+	public String checkToken(String token) throws FacadeException{
+		try{
+			String login = userDao.checkToken(token);
+			return login;
+		}
+		catch(DAOException d){
+			throw new FacadeException();
+		}
 	}
 }

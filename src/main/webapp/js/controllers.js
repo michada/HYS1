@@ -9,7 +9,7 @@
         $scope.events = [];
         $scope.showEvents = {
         		programmed: true,
-        		completed: true,
+        		completed: false,
         		cancelled: true
         };
 
@@ -31,4 +31,42 @@
 			(e.status == 'CANCELLED' && $scope.showEvents.cancelled);
         };
     }]);
+    
+    
+    app.controller('loginController', function ($scope, $location, $cookieStore, authorization, api) {
+    	  $scope.title = 'Likeastore. Analytics';
+    	  $scope.login = "";
+    	  $scope.password = "";
+    	  $scope.login = function () {
+    	      var credentials = {
+    	          login: $scope.login,
+    	          password: $scope.password
+    	      };
+    	      var success = function (data) {
+    	          var token = data.token;
+    	          api.init(token);
+    	          $cookieStore.put('token', token);
+    	          $location.path('/');
+    	          alert("login correcto");
+    	      };
+    	      var error = function () {
+    	    	  alert("login incorrecto");
+    	          // TODO: apply user notification here..
+    	      };
+    	      authorization.login(credentials).success(success).error(error);
+    	  };
+    	});
+    
+    app.factory('authorization', function ($http, config) {
+    	  var url = config.analytics.url;
+
+    	  return {
+    	      login: function (credentials) {
+    	          return $http.post(url + '/login', credentials);
+    	      }
+    	  };
+    	});
+    
+    
+    
 })();

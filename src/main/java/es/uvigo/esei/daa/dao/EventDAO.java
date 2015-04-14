@@ -20,7 +20,15 @@ public class EventDAO extends DAO {
 
 	public List<Event> getPublicEvents() {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from Event e where e.visibility = 'PUBLIC'";
+		String hql = "from Event e where e.visibility = 'PUBLIC' order by e.date ASC";
+		Query query = session.createQuery(hql);
+		List<Event> eventList = query.list();
+		return eventList;
+	}
+	
+	public List<Event> getAllEvents(){
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from Event e where order by e.date ASC, count(e.assistants) DESC";
 		Query query = session.createQuery(hql);
 		List<Event> eventList = query.list();
 		return eventList;
