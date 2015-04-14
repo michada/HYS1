@@ -3,8 +3,7 @@
 <head>
 <%@ include file="imports/head.jsp"%>
 <title>List - Have You Seen?</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.3/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.3/angular.min.js"></script>
 <script src="js/controllers.js"></script>
 </head>
 <body ng-controller="eventController">
@@ -43,12 +42,8 @@
 					</td>
 					<td class="vcenter">
 						<div class="pull-right">
-							<img class="img-rounded img-responsive img-event"
-								src="http://lorempixel.com/150/150/"
-								ng-if="e.status != 'CANCELLED'" />
-							<img
-								class="img-rounded img-responsive img-event img-cancelled"
-								src="img/cancelled-event.png" ng-if="e.status == 'CANCELLED'" />
+							<img class="img-rounded img-responsive img-event" src="http://lorempixel.com/150/150/" ng-if="e.status != 'CANCELLED'" />
+							<img class="img-rounded img-responsive img-event img-cancelled" src="img/cancelled-event.png" ng-if="e.status == 'CANCELLED'" />
 						</div>
 					</td>
 				</tr>

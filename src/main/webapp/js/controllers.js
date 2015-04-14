@@ -14,7 +14,7 @@
         };
 
         $scope.getEventData = function () {
-            $http.get('/HYS1/rest/event')
+            $http.get('rest/event')
                 .success(function (data) {
                     $scope.events = data;
                 })

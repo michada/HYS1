@@ -15,7 +15,7 @@ public class UsersDAO extends DAO {
 	
 	public String checkLogin(String login, String password) throws DAOException {
 		try (final Connection conn = this.getConnection()) {
-			final String query = "SELECT password FROM users WHERE login=?";
+			final String query = "SELECT password FROM user WHERE userName=?";
 			
 			try (PreparedStatement statement = conn.prepareStatement(query)) {
 				statement.setString(1, login);
@@ -26,16 +26,20 @@ public class UsersDAO extends DAO {
 						final String shaPassword = encodeSha256(password);
 						
 						if (shaPassword.equals(dbPassword)) {
+							System.out.println("BIEN!!!");
 							return encodeBase64(login + ":" + password);
 						} else {
+							System.out.println("MAL!!!");
 							return null;
 						}
 					} else {
+						System.out.println("FATAL!!!");
 						return null;
 					}
 				}
 			}
 		} catch (SQLException e) {
+			System.out.println("EXCEPCION!!!");
 			LOG.log(Level.SEVERE, "Error checking login", e);
 			throw new DAOException(e);
 		}
@@ -54,7 +58,7 @@ public class UsersDAO extends DAO {
 		final String password = encodeSha256(decodedToken.substring(decodedToken.indexOf(':') + 1));
 		
 		try (final Connection conn = this.getConnection()) {
-			final String query = "SELECT password FROM users WHERE login=?";
+			final String query = "SELECT password FROM user WHERE userName=?";
 			
 			try (PreparedStatement statement = conn.prepareStatement(query)) {
 				statement.setString(1, login);
