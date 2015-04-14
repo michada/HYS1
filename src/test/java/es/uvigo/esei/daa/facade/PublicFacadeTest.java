@@ -50,4 +50,9 @@ public class PublicFacadeTest extends AbstractTestCase {
 	public void testGetPublicEvents() throws FacadeException {
 		assertEquals(6, this.facade.getPublicEventList().size());
 	}
+	
+	@Test
+	public void testAllEvents() throws FacadeException {
+		assertEquals(8, this.facade.getAllEventList().size());
+	}
 }

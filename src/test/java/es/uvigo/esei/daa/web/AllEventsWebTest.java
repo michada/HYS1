@@ -22,7 +22,7 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
 
-public class EventsWebTest extends AbstractTestCase {
+public class AllEventsWebTest extends AbstractTestCase {
 	private static final int DEFAULT_WAIT_TIME = 1;
 	private WebDriver driver;
 	private StringBuffer verificationErrors = new StringBuffer();
@@ -70,16 +70,17 @@ public class EventsWebTest extends AbstractTestCase {
 
 	@Test
 	public void testAllList() throws Exception {
-		verifyXpathCount("//tr", 6);
+		verifyXpathCount("//tr", 8);
 	}
 	
 	@Test
 	public void testOnlyCompletedEvents() {
 		driver.findElement(By.id("showEvents.programmed")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
 		driver.findElement(By.id("showEvents.cancelled")).click();
 		
-		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
 		verifyXpathCount("//tr[@class='ng-scope']", 2);
@@ -87,23 +88,25 @@ public class EventsWebTest extends AbstractTestCase {
 
 	@Test
 	public void testOnlyCancelledEvents() {
-		driver.findElement(By.id("showEvents.completed")).click();
 		driver.findElement(By.id("showEvents.programmed")).click();
+		//driver.findElement(By.id("showEvents.completed")).click();
+		//driver.findElement(By.id("showEvents.cancelled")).click();
 		
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 1);
+		verifyXpathCount("//tr[@class='ng-scope']", 3);
 	}
 
 	@Test
 	public void testOnlyProgrammedEvents() {
-		driver.findElement(By.id("showEvents.completed")).click();
+		//driver.findElement(By.id("showEvents.programmed")).click();
+		//driver.findElement(By.id("showEvents.completed")).click();
 		driver.findElement(By.id("showEvents.cancelled")).click();
 		
-		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
 		verifyXpathCount("//tr[@class='ng-scope']", 3);

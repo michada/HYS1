@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.List;
 
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
@@ -13,7 +14,6 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spring.SpringLifecycleListener;
 import org.glassfish.jersey.test.JerseyTest;
 import org.hibernate.SessionFactory;
 import org.junit.After;
@@ -32,7 +32,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.filter.RequestContextFilter;
 
 import es.uvigo.esei.daa.TestUtils;
-import es.uvigo.esei.daa.entities.Event;
+import es.uvigo.esei.daa.services.pojo.AllEventPojo;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,7 +67,7 @@ public class EventTest extends JerseyTest {
 	public void afterTransaction() throws Exception {
 		TestUtils.clearTestDatabase();
 	}
-	
+
 	@After
 	public void tearDown() throws Exception {
 		super.tearDown();
@@ -81,7 +81,7 @@ public class EventTest extends JerseyTest {
 
 		rc.register(RequestContextFilter.class);
 		rc.register(JacksonFeature.class);
-		
+
 		rc.property("contextConfigLocation",
 				"classpath:spring/applicationContext.xml");
 		return rc;
@@ -103,5 +103,18 @@ public class EventTest extends JerseyTest {
 				.readEntity(new GenericType<List<PublicEventPojo>>() {
 				});
 		assertEquals(6, events.size());
+	}
+
+	@Test
+	public void testAllEventList() throws IOException {
+		final WebTarget target = target("event");
+		final Response response = target.request()
+				.cookie("token", "bXJqYXRvOm1yamF0bw==").get();
+		assertOkStatus(response);
+
+		final List<AllEventPojo> events = response
+				.readEntity(new GenericType<List<AllEventPojo>>() {
+				});
+		assertEquals(8, events.size());
 	}
 }
