@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.dao.EventDAO;
-import es.uvigo.esei.daa.dao.UserDAO;
+import es.uvigo.esei.daa.dao.UsersDAO;
 import es.uvigo.esei.daa.entities.Event;
 import es.uvigo.esei.daa.services.pojo.AllEventPojo;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
@@ -21,7 +21,7 @@ public class PublicFacade {
 	private EventDAO eventDao;
 	
 	@Autowired
-	private UserDAO userDao;
+	private UsersDAO userDao;
 
 	public List<PublicEventPojo> getPublicEventList() throws FacadeException {
 		List<Event> list = null;

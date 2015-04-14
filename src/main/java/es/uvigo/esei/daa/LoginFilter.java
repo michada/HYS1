@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.dao.UsersDAO;
 
-@WebFilter(urlPatterns = { "/login", "/logout" })
+@WebFilter(urlPatterns = { "/*" })
 public class LoginFilter implements Filter {
 	@Override
 	public void doFilter(
@@ -29,15 +29,18 @@ public class LoginFilter implements Filter {
 		final HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
 		try {
-			if (isLogoutPath(httpRequest)) {
+			if(isLogoutPath(httpRequest)) {
 				removeTokenCookie(httpResponse);
 				redirectToIndex(httpRequest, httpResponse);
-			} else if (isIndexPath(httpRequest) || checkToken(httpRequest)) {
-				chain.doFilter(request, response);
-			} else if (checkLogin(httpRequest, httpResponse)) {
+			} else if(checkLogin(httpRequest, httpResponse)) {
 				continueWithRedirect(httpRequest, httpResponse);
-			} else if (isRestPath(httpRequest)) {
-				httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);				
+			} else if(isIndexPath(httpRequest) || checkToken(httpRequest) || 
+					isCssPath(httpRequest) || isFontAwesomePath(httpRequest) || 
+					isFontPath(httpRequest) || isImgPath(httpRequest) || 
+					isImportsPath(httpRequest) || isJsPath(httpRequest) || 
+					isLoginPath(httpRequest) || isShowEventsPath(httpRequest) || 
+					isRestPath(httpRequest)) {
+				chain.doFilter(request, response);
 			} else {
 				redirectToIndex(httpRequest, httpResponse);
 			}
@@ -95,8 +98,10 @@ public class LoginFilter implements Filter {
 			final String token = new UsersDAO().checkLogin(login, password);
 			
 			if (token == null) {
+				System.out.println("TOKEN VACIO");
 				return false;
 			} else {
+				System.out.println("TOKEN LLENO");
 				response.addCookie(new Cookie("token", token));
 				
 				return true;
@@ -128,5 +133,37 @@ public class LoginFilter implements Filter {
 
 	@Override
 	public void destroy() {
+	}
+	
+	private boolean isCssPath(HttpServletRequest request) {
+		return request.getServletPath().startsWith("/css");
+	}
+	
+	private boolean isFontAwesomePath(HttpServletRequest request) {
+		return request.getServletPath().startsWith("/font-awesome");
+	}
+	
+	private boolean isFontPath(HttpServletRequest request) {
+		return request.getServletPath().startsWith("/fonts");
+	}
+	
+	private boolean isImgPath(HttpServletRequest request) {
+		return request.getServletPath().startsWith("/img");
+	}
+	
+	private boolean isImportsPath(HttpServletRequest request) {
+		return request.getServletPath().startsWith("/imports");
+	}
+	
+	private boolean isJsPath(HttpServletRequest request) {
+		return request.getServletPath().startsWith("/js");
+	}
+	
+	private boolean isLoginPath(HttpServletRequest request) {
+		return request.getServletPath().equals("/login.jsp");
+	}
+	
+	private boolean isShowEventsPath(HttpServletRequest request) {
+		return request.getServletPath().equals("/showEvents.jsp");
 	}
 }
