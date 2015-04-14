@@ -49,6 +49,7 @@ public class EventTest extends JerseyTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		TestUtils.createFakeContext();
+		TestUtils.clearTestDatabase();
 	}
 
 	@BeforeTransaction
@@ -101,6 +102,6 @@ public class EventTest extends JerseyTest {
 		final List<PublicEventPojo> events = response
 				.readEntity(new GenericType<List<PublicEventPojo>>() {
 				});
-		assertEquals(1, events.size());
+		assertEquals(6, events.size());
 	}
 }

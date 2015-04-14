@@ -15,13 +15,13 @@
 			<div class="navigation">
 				<div class="nav menu nav-pills btn-group">
 					<label class="btn btn-primary">
-						<input class="vcheck" type="checkbox" autocomplete="off" ng-model="showEvents.programmed"> Programmed events
+						<input id="showEvents.programmed" class="vcheck" type="checkbox" autocomplete="off" ng-model="showEvents.programmed"> Programmed events
 					</label>
 					<label class="btn btn-primary">
-						<input class="vcheck" type="checkbox" autocomplete="off" checked ng-model="showEvents.completed"> Completed events
+						<input id="showEvents.completed" class="vcheck" type="checkbox" autocomplete="off" checked ng-model="showEvents.completed"> Completed events
 					</label>
 					<label class="btn btn-primary">
-						<input class="vcheck" type="checkbox" autocomplete="off" checked ng-model="showEvents.cancelled"> Cancelled events
+						<input id="showEvents.cancelled" class="vcheck" type="checkbox" autocomplete="off" checked ng-model="showEvents.cancelled"> Cancelled events
 					</label>
 				</div>
 			</div>

@@ -2,8 +2,6 @@ package es.uvigo.esei.daa.facade;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -15,10 +13,8 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
-import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.services.FacadeException;
 import es.uvigo.esei.daa.services.PublicFacade;
-import es.uvigo.esei.daa.services.pojo.EventPojo;
 public class PublicFacadeTest extends AbstractTestCase {
 	@Autowired
 	private PublicFacade facade;
@@ -29,7 +25,7 @@ public class PublicFacadeTest extends AbstractTestCase {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		TestUtils.createFakeContext();
-		//TestUtils.clearTestDatabase(sessionFactory);
+		TestUtils.clearTestDatabase();
 	}
 	
 	@BeforeTransaction
@@ -52,6 +48,6 @@ public class PublicFacadeTest extends AbstractTestCase {
 
 	@Test
 	public void testGetPublicEvents() throws FacadeException {
-		assertEquals(1, this.facade.getEventList().size());
+		assertEquals(6, this.facade.getEventList().size());
 	}
 }

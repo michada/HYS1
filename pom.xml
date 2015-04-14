@@ -23,7 +23,7 @@
 		<commons.dbcp.version>1.4</commons.dbcp.version>
 		<java.servlet.version>3.0.1</java.servlet.version>
 		<junit.version>4.12</junit.version>
-		<selenium.java.version>2.44.0</selenium.java.version>
+		<selenium.java.version>2.45.0</selenium.java.version>
 		<spring.test.version>4.1.4.RELEASE</spring.test.version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		
@@ -265,6 +265,8 @@
 					<path>/HYS1</path>
 					<contextFile>src/test/webapp/META-INF/context.xml</contextFile>
 					<useTestClasspath>false</useTestClasspath>
+					<!--  <tomcatWebXml>src/test/webapp/WEB-INF/web.xml</tomcatWebXml> --> 
+					<!--  <warFile>${project.build.directory}/${project.build.finalName}.war</warFile> -->
 				</configuration>
 				<executions>
 					<execution>

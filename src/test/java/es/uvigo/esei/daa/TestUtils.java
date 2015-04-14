@@ -68,8 +68,14 @@ public final class TestUtils {
 				.append("ALTER TABLE event AUTO_INCREMENT = 1;")
 				.append("ALTER TABLE user AUTO_INCREMENT = 1;")
 				.append("INSERT INTO user (id,userName,password) VALUES (1, 'mrjato', '59189332a4abf8ddf66fde068cad09eb563b4bd974f7663d97ff6852a7910a73');")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (1,'2015-12-09','Howard','CANCELED','Lacy','PUBLIC',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (2,'2015-12-09','Howard','CANCELED','Lacy','PRIVATE',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (1,'2015-12-09','Howard','CANCELLED','Lacy','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (2,'2015-12-09','Howard','CANCELLED','Lacy','PRIVATE',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (3,'2015-12-09','Howard','CANCELLED','Lacy','PRIVATE',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (4,'2015-12-09','Paco','COMPLETED','Porras','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (5,'2015-12-09','Cosa','COMPLETED','Peposa','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (6,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (7,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (8,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
 				.toString();
 
 		final DataSource ds = createTestingDataSource();

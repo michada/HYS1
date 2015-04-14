@@ -38,22 +38,23 @@ public class EventsWebTest extends AbstractTestCase {
 	
 	@BeforeTransaction
 	public void beforeTransaction() throws Exception {
+		TestUtils.clearTestDatabase();
 		TestUtils.initTestDatabase();
 	}
 	
 	@Before
 	public void setUp() throws Exception {
-		final String baseUrl = "http://localhost:8090/HYS1/";
+		final String baseUrl = "http://localhost:9080/HYS1/";
 		
 		driver = new FirefoxDriver();
 		driver.get(baseUrl);
 		driver.manage().addCookie(new Cookie("token", "bXJqYXRvOm1yamF0bw=="));
 		
 		// Driver will wait DEFAULT_WAIT_TIME if it doesn't find and element.
-		//driver.manage().timeouts().implicitlyWait(DEFAULT_WAIT_TIME, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(DEFAULT_WAIT_TIME, TimeUnit.SECONDS);
 		
-		driver.get(baseUrl + "index-async.html");
-		driver.findElement(By.id("people-list"));
+		driver.get(baseUrl + "showEvents.jsp");
+		//driver.findElement(By.id("people-list"));
 	}
 	
 	@After
@@ -68,73 +69,53 @@ public class EventsWebTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testList() throws Exception {
-		verifyXpathCount("//tr", 11);
-	}
-
-	@Test
-	public void testAdd() throws Exception {
-		final String title = "Test event";
-		final String description = "Test description";
-		final String date = "2015/03/31";
-		final String status = "status";
-		
-		driver.findElement(By.id("title")).clear();
-		driver.findElement(By.id("title")).sendKeys(title);
-		driver.findElement(By.id("description")).clear();
-		driver.findElement(By.id("description")).sendKeys(description);
-		driver.findElement(By.id("date")).clear();
-		driver.findElement(By.id("date")).sendKeys(date);
-		driver.findElement(By.id("status")).clear();
-		driver.findElement(By.id("status")).sendKeys(status);
-		driver.findElement(By.id("btnSubmit")).click();
-		//driver.findElement(By.xpath("//th[text()='Hola']"));
-		
-		/*assertEquals(name, 
-			driver.findElement(By.cssSelector("tr:last-child > td.name")).getText()
-		);
-		assertEquals(surname, 
-			driver.findElement(By.cssSelector("tr:last-child > td.surname")).getText()
-		);*/
-	}
-
-	@Test
-	public void testEdit() throws Exception {
-		final String title = "Test event";
-		final String description = "Test description";
-		final String date = "2015/03/31";
-		final String status = "status";
-		
-		final String trId = driver.findElement(By.xpath("//tr[last()]")).getAttribute("id");
-		driver.findElement(By.xpath("//tr[@id='" + trId + "']//a[text()='Edit']")).click();
-		driver.findElement(By.id("title")).clear();
-		driver.findElement(By.id("title")).sendKeys(title);
-		driver.findElement(By.id("description")).clear();
-		driver.findElement(By.id("description")).sendKeys(description);
-		driver.findElement(By.id("date")).clear();
-		driver.findElement(By.id("date")).sendKeys(date);
-		driver.findElement(By.id("status")).clear();
-		driver.findElement(By.id("status")).sendKeys(status);
-		driver.findElement(By.id("btnSubmit")).click();
-		//waitForTextInElement(By.name("name"), "");
-		//waitForTextInElement(By.name("surname"), "");
-		
-		/*assertEquals(name, 
-			driver.findElement(By.xpath("//tr[@id='" + trId + "']/td[@class='name']")).getText()
-		);
-		assertEquals(surname, 
-			driver.findElement(By.xpath("//tr[@id='" + trId + "']/td[@class='surname']")).getText()
-		);*/
-	}
-
-	@Test
-	public void testDelete() throws Exception {
-		final String trId = driver.findElement(By.xpath("//tr[last()]")).getAttribute("id");
-		driver.findElement(By.xpath("(//a[contains(text(),'Delete')])[last()]")).click();
-		driver.switchTo().alert().accept();
-		waitUntilNotFindElement(By.id(trId));
+	public void testAllList() throws Exception {
+		verifyXpathCount("//tr", 6);
 	}
 	
+	@Test
+	public void testOnlyCompletedEvents() {
+		driver.findElement(By.id("showEvents.programmed")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		
+		verifyXpathCount("//tr[@class='ng-scope']", 2);
+	}
+
+	@Test
+	public void testOnlyCancelledEvents() {
+		driver.findElement(By.id("showEvents.completed")).click();
+		driver.findElement(By.id("showEvents.programmed")).click();
+		
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		
+		verifyXpathCount("//tr[@class='ng-scope']", 1);
+	}
+
+	@Test
+	public void testOnlyProgrammedEvents() {
+		driver.findElement(By.id("showEvents.completed")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		
+		verifyXpathCount("//tr[@class='ng-scope']", 3);
+	}
+	
+	@Test
+	public void testListItem() {
+		verifyXpathCount("//tr[1][contains(.,'Lacy')]", 1);
+		verifyXpathCount("//tr[1][contains(.,'Howard')]", 1);
+		verifyXpathCount("//tr[1][contains(.,'Dec 9, 2015 at 00:00')]", 1);
+	}
+
 	private boolean waitUntilNotFindElement(By by) {
 	    return new WebDriverWait(driver, DEFAULT_WAIT_TIME)
 	    	.until(ExpectedConditions.invisibilityOfElementLocated(by));
