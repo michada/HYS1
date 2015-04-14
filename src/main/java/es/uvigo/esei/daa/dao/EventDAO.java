@@ -28,7 +28,7 @@ public class EventDAO extends DAO {
 	
 	public List<Event> getAllEvents(){
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from Event e where order by e.date ASC, count(e.assistants) DESC";
+		String hql = "from Event e order by e.date ASC";
 		Query query = session.createQuery(hql);
 		List<Event> eventList = query.list();
 		return eventList;

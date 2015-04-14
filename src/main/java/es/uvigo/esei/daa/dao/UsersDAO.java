@@ -10,6 +10,9 @@ import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class UsersDAO extends DAO {
 	private final static Logger LOG = Logger.getLogger("UsersDAO");
 	

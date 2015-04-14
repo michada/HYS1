@@ -38,6 +38,9 @@
 							<p>
 								<b>State:</b> {{e.status}}
 							</p>
+							<p ng-if="e.visibility">
+								<b>Visibility:</b> {{e.visibility}}
+							</p>
 						</div>
 					</td>
 					<td class="vcenter">

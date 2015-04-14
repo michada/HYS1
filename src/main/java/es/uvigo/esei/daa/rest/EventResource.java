@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -33,9 +33,9 @@ public class EventResource {
 	}
 
 	@GET
-	public Response list(@HeaderParam("token") String token) {
+	public Response list(@CookieParam("token") String token) {
 		try {
-			if (facade.checkToken(token)!=null) {
+			if (facade.checkToken(token)==null) {
 				List<PublicEventPojo> list = this.facade.getPublicEventList();
 				return Response.ok(list,
 						MediaType.APPLICATION_JSON).build();
