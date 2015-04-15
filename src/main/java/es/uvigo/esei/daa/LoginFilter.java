@@ -109,10 +109,8 @@ public class LoginFilter implements Filter {
 			final String token = new UsersDAO().checkLogin(login, password);
 
 			if (token == null) {
-				System.out.println("TOKEN VACIO");
 				return false;
 			} else {
-				System.out.println("TOKEN LLENO");
 				response.addCookie(new Cookie("token", token));
 
 				return true;

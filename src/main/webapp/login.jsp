@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="event">
+<html ng-app="hys1">
 <head>
 <%@ include file="imports/head.jsp"%>
 <title>Login - Have You Seen?</title>

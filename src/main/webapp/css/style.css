@@ -132,8 +132,8 @@ p.copyright {
 }
 
 .img-event {
-	height:150px;
-	width:150px;
+	height: 150px;
+	width: 150px;
 }
 
 .img-cancelled {
@@ -142,6 +142,21 @@ p.copyright {
 
 .vcheck {
 	display: table-cell;
-	vertical-align: bottom;	
+	vertical-align: bottom;
 }
+
+.input-group-addon.beautiful input[type="checkbox"],
+.input-group-addon.beautiful input[type="radio"] {
+    display: none;
+}
+
+@media (max-width: 550px) {
+	.btn-responsive-group {
+		width: 100% !important;
+	}
+	
+	.img-event {
+		height: 75px !important;
+		width: 75px !important;
+	}
 }

@@ -14,5 +14,7 @@
 </footer>
 <script src="js/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.3/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-cookies.min.js"></script>
 <script src="js/controllers.js"></script>
+<script src="js/beautiful.js"></script>

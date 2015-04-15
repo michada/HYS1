@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="event">
+<html ng-app="hys1">
 <head>
 <%@ include file="imports/head.jsp"%>
 <title>List - Have You Seen?</title>
@@ -10,14 +10,14 @@
 	<div class="content-section-a">
 		<div class="container">
 			<div class="navigation">
-				<div class="nav menu nav-pills btn-group">
-					<label class="btn btn-primary">
+				<div class="nav nav-pills text-center">
+					<label class="btn btn-primary btn-responsive-group">
 						<input id="showEvents.programmed" class="vcheck" type="checkbox" autocomplete="off" ng-model="showEvents.programmed"> Programmed events
 					</label>
-					<label class="btn btn-primary">
+					<label class="btn btn-primary btn-responsive-group">
 						<input id="showEvents.completed" class="vcheck" type="checkbox" autocomplete="off" checked ng-model="showEvents.completed"> Completed events
 					</label>
-					<label class="btn btn-primary">
+					<label class="btn btn-primary btn-responsive-group">
 						<input id="showEvents.cancelled" class="vcheck" type="checkbox" autocomplete="off" checked ng-model="showEvents.cancelled"> Cancelled events
 					</label>
 				</div>

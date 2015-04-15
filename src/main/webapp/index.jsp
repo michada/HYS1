@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="hys1">
 <head>
 	<%@ include file="imports/head.jsp" %>
 	<title>Home - Have You Seen?</title>
