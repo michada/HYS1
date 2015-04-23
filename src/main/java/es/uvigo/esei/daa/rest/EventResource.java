@@ -23,7 +23,7 @@ import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 @Path("/event")
 @Produces(MediaType.APPLICATION_JSON)
 public class EventResource {
-	private final static Logger LOG = Logger.getLogger("EventResource");
+	private final static Logger LOG = Logger.getLogger(EventResource.class.getSimpleName());
 
 	@Autowired
 	private PublicFacade facade;

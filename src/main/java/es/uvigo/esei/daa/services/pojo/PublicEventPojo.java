@@ -3,7 +3,9 @@ package es.uvigo.esei.daa.services.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import es.uvigo.esei.daa.entities.Category;
 import es.uvigo.esei.daa.entities.Event;
+import es.uvigo.esei.daa.entities.Location;
 
 public class PublicEventPojo implements Serializable {
 
@@ -15,7 +17,9 @@ public class PublicEventPojo implements Serializable {
 	private Date date;
 	private String status;
 	private int numAssistants;
-	
+	private Location location;
+	private Category category;
+
 	public PublicEventPojo(){
 		
 	}
@@ -27,10 +31,26 @@ public class PublicEventPojo implements Serializable {
 		this.date = event.getDate();
 		this.status = event.getStatus().toString();
 		this.numAssistants = event.getNumAssistants();
-		// Falta visibility
-		// Falta numassitants
+		this.location = event.getLocation();
+		this.category = event.getCategory();
 	}
 	
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+		
 	public int getId() {
 		return id;
 	}

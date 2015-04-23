@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,22 +28,22 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Component
 @Entity
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Table(name="event")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@Table(name = "event")
 public class Event implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	public enum EventStatus {
-		PROGRAMMED,CANCELLED,COMPLETED
+		PROGRAMMED, CANCELLED, COMPLETED
 
 	}
-	
+
 	public enum Visibility {
 		PUBLIC, PRIVATE
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -59,12 +58,6 @@ public class Event implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Visibility visibility;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JsonBackReference
-	private CulturalElement culturalElement;
-	@ManyToOne
-	@JsonBackReference
-	private Personality personality;
 	@ManyToOne
 	@JsonBackReference
 	@NotNull
@@ -79,27 +72,24 @@ public class Event implements Serializable {
 	@JsonBackReference
 	@NotNull
 	private Location location;
-	
+
+	@ManyToOne
+	@JsonBackReference
+	@NotNull
+	private Category category;
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	public Event() {
 
 	}
 
-	public CulturalElement getCulturalElement() {
-		return culturalElement;
-	}
-
-	public void setCulturalElement(CulturalElement culturalElement) {
-		this.culturalElement = culturalElement;
-	}
-
-	public Personality getPersonality() {
-		return personality;
-	}
-
-	public void setPersonality(Personality personality) {
-		this.personality = personality;
-	}
-	
 	public int getId() {
 		return id;
 	}
@@ -171,17 +161,16 @@ public class Event implements Serializable {
 	public void setStatus(EventStatus status) {
 		this.status = status;
 	}
-	
 
 	public Visibility getVisibility() {
 		return visibility;
 	}
-	
+
 	public void setVisibility(Visibility visibility) {
 		this.visibility = visibility;
 	}
-	
-	public int getNumAssistants(){
+
+	public int getNumAssistants() {
 		return assistants.size();
 	}
 }
