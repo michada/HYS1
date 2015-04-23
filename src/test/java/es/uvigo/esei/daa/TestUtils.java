@@ -76,6 +76,7 @@ public final class TestUtils {
 				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (6,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
 				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (7,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
 				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (8,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
+				//.append("insert into event_assistants(eventsToAttend_id, user_id) values (1, 1);")
 				.toString();
 
 		final DataSource ds = createTestingDataSource();
