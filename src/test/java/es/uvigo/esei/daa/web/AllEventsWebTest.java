@@ -51,7 +51,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		driver.manage().addCookie(new Cookie("token", "bXJqYXRvOm1yamF0bw=="));
 		
 		// Driver will wait DEFAULT_WAIT_TIME if it doesn't find and element.
-		driver.manage().timeouts().implicitlyWait(DEFAULT_WAIT_TIME, TimeUnit.HOURS);
+		driver.manage().timeouts().implicitlyWait(DEFAULT_WAIT_TIME, TimeUnit.SECONDS);
 		
 		driver.get(baseUrl + "showEvents.jsp");
 		//driver.findElement(By.id("people-list"));
