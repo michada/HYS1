@@ -16,7 +16,7 @@
 								$scope.showEvents = {
 									programmed : true,
 									completed : false,
-									cancelled : true
+									cancelled : false
 								};
 
 								$scope.getEventData = function() {
