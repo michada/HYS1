@@ -33,4 +33,12 @@ public class EventDAO extends DAO {
 		List<Event> eventList = query.list();
 		return eventList;
 	}
+	
+	public List<Event> getAllEvents(
+			SearchFiltersBean $busquedaSubastasBean, 
+			PagBean pagBean) {
+		
+		// Filters
+		
+	}
 }
