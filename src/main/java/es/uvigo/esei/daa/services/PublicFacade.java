@@ -8,17 +8,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import uk.me.jstott.jcoord.LatLng;
+import es.uvigo.esei.daa.dao.CategoryDAO;
 import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.dao.EventDAO;
 import es.uvigo.esei.daa.dao.UsersDAO;
+import es.uvigo.esei.daa.entities.Category;
 import es.uvigo.esei.daa.entities.Event;
 import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.pojo.AllEventPojo;
+import es.uvigo.esei.daa.services.pojo.PublicCategoryPojo;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 
 @Service
 @Transactional
 public class PublicFacade {
+	@Autowired
+	private CategoryDAO categoryDao;
+	
 	@Autowired
 	private EventDAO eventDao;
 
@@ -70,5 +76,18 @@ public class PublicFacade {
 		double module = latLng2.distance(latLng1);
 		
 		return module <= distance;
+	}
+	
+	public List<PublicCategoryPojo> getCategories() {
+		List<Category> list = null;
+		list = categoryDao.getPublicEvents();
+
+		List<PublicCategoryPojo> listCategoryPojo = new ArrayList<PublicCategoryPojo>();
+		for (Category category : list) {
+			PublicCategoryPojo pojo = new PublicCategoryPojo(category);
+			listCategoryPojo.add(pojo);
+		}
+
+		return listCategoryPojo;
 	}
 }
