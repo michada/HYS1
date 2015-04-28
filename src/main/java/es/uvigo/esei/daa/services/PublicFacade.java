@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import uk.me.jstott.jcoord.LatLng;
 import es.uvigo.esei.daa.dao.DAOException;
 import es.uvigo.esei.daa.dao.EventDAO;
 import es.uvigo.esei.daa.dao.UsersDAO;
@@ -15,6 +14,7 @@ import es.uvigo.esei.daa.entities.Event;
 import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.pojo.AllEventPojo;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
+import es.uvigo.esei.daa.util.LocationUtil;
 
 @Service
 @Transactional
@@ -64,11 +64,6 @@ public class PublicFacade {
 	}
 	
 	public boolean checkDistance(Location l1, Location l2, Double distance) {
-		// Euclidean distance
-		LatLng latLng1 = new LatLng(l1.getLatitude(), l1.getLongitude());
-		LatLng latLng2 = new LatLng(l2.getLatitude(), l2.getLongitude());
-		double module = latLng2.distance(latLng1);
-		
-		return module <= distance;
+		return LocationUtil.checkDistance(l1, l2, distance);
 	}
 }
