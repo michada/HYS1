@@ -1,4 +1,7 @@
 $(document).ready(function() {
-    $('#list').click(function(event){event.preventDefault();$('#products .item').addClass('list-group-item');});
-    $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});
+	$('.filters').on({
+	    "shown.bs.dropdown": function() { this.closable = true; },
+	    "click":             function() { this.closable = false; },
+	    "hide.bs.dropdown":  function() { this.aux = this.closable; this.closable = true; return this.aux; }
+	});
 });
