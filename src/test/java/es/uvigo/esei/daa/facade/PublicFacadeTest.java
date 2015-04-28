@@ -13,7 +13,7 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
-import es.uvigo.esei.daa.facade.fake.LocationFake;
+import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.FacadeException;
 import es.uvigo.esei.daa.services.PublicFacade;
 public class PublicFacadeTest extends AbstractTestCase {
@@ -61,8 +61,13 @@ public class PublicFacadeTest extends AbstractTestCase {
 	@Test
 	public void testCheckDistanceIsIn() {
 		// Grados decimales
-		LocationFake l1 = new LocationFake(10.0, 20.0);
-		LocationFake l2 = new LocationFake(11.0, 19.0);
+		Location l1 = new Location();
+		l1.setLatitude(10.0);
+		l1.setLongitude(20.0);
+		
+		Location l2 = new Location();
+		l1.setLatitude(11.0);
+		l1.setLongitude(19.0);
 		
 		assertEquals(true, facade.checkDistance(l1, l2, 152.71));
 	}
@@ -70,8 +75,13 @@ public class PublicFacadeTest extends AbstractTestCase {
 	@Test
 	public void testCheckDistanceIsInBoundaries() {
 		// Grados decimales
-		LocationFake l1 = new LocationFake(0.0, 0.0);
-		LocationFake l2 = new LocationFake(20.0, 20.0);
+		Location l1 = new Location();
+		l1.setLatitude(0.0);
+		l1.setLongitude(0.0);
+		
+		Location l2 = new Location();
+		l1.setLatitude(10.0);
+		l1.setLongitude(20.0);
 		
 		assertEquals(true, facade.checkDistance(l1, l2, 3112.));
 	}
@@ -79,8 +89,13 @@ public class PublicFacadeTest extends AbstractTestCase {
 	@Test
 	public void testCheckDistanceIsNotInLong() {
 		// Grados decimales
-		LocationFake l1 = new LocationFake(0.0, 0.0);
-		LocationFake l2 = new LocationFake(20.1, 0.0);
+		Location l1 = new Location();
+		l1.setLatitude(0.0);
+		l1.setLongitude(0.0);
+		
+		Location l2 = new Location();
+		l1.setLatitude(20.1);
+		l1.setLongitude(0.0);
 		
 		assertEquals(false, facade.checkDistance(l1, l2, 2224.));
 	}
@@ -88,8 +103,12 @@ public class PublicFacadeTest extends AbstractTestCase {
 	@Test
 	public void testCheckDistanceIsNotInLatitut() {
 		// Grados decimales
-		LocationFake l1 = new LocationFake(0.0, 0.0);
-		LocationFake l2 = new LocationFake(0.0, 20.1);
+		Location l1 = new Location();
+		l1.setLatitude(0.0);
+		l1.setLongitude(0.0);
+		Location l2 = new Location();
+		l1.setLatitude(0.0);
+		l1.setLongitude(20.1);
 		
 		assertEquals(false, facade.checkDistance(l1, l2, 2224.));
 	}
