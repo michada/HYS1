@@ -9,7 +9,6 @@ import java.util.List;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -59,6 +58,7 @@ public class EventTest extends JerseyTest {
 		ResourceConfig rc = new ResourceConfig();
 		
 		rc.register(EventResource.class);
+		rc.register(CategoryResource.class);
 
 		rc.register(RequestContextFilter.class);
 		rc.register(JacksonFeature.class);
@@ -78,9 +78,10 @@ public class EventTest extends JerseyTest {
 
 	@Test
 	public void testList() throws IOException {
-		final Response response = target("event").request()
-			.accept(MediaType.APPLICATION_JSON_TYPE)
-		.get();
+
+		final Response response = target("event/0").request().
+				//header("Content-Type", "application/json").acceptEncoding("UTF-8").
+				get();
 		assertOkStatus(response);
 		final List<PublicEventPojo> events = response
 				.readEntity(new GenericType<List<PublicEventPojo>>() {
@@ -90,7 +91,7 @@ public class EventTest extends JerseyTest {
 
 	@Test
 	public void testAllEventList() throws IOException {
-		final WebTarget target = target("event");
+		final WebTarget target = target("event/0");
 		final Response response = target.request()
 				.cookie("token", "T21hcjpMdWNhcw==").get();
 		assertOkStatus(response);

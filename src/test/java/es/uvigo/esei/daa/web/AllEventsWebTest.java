@@ -78,6 +78,12 @@ public class AllEventsWebTest extends AbstractTestCase {
 		driver.findElement(By.id("showEvents.programmed")).click();
 		driver.findElement(By.id("showEvents.completed")).click();
 		driver.findElement(By.id("showEvents.cancelled")).click();
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());

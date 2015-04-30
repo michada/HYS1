@@ -2,7 +2,10 @@ package es.uvigo.esei.daa.facade;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,9 +16,12 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
+import es.uvigo.esei.daa.bean.EventFilterBean;
+import es.uvigo.esei.daa.bean.PagBean;
 import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.FacadeException;
 import es.uvigo.esei.daa.services.PublicFacade;
+import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 public class PublicFacadeTest extends AbstractTestCase {
 	@Autowired
 	private PublicFacade facade;
@@ -49,12 +55,70 @@ public class PublicFacadeTest extends AbstractTestCase {
 
 	@Test
 	public void testGetPublicEvents() throws FacadeException {
-		assertEquals(9, this.facade.getPublicEventList().size());
+		//assertEquals(9, this.facade.getPublicEventList().size());
+
 	}
 	
 	@Test
 	public void testAllEvents() throws FacadeException {
-		assertEquals(13, this.facade.getAllEventList().size());
+		//assertEquals(13, this.facade.getAllEventList().size());
+	}
+	
+	@Test
+	public void testGetPublicEventsByCategory() throws FacadeException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		
+		eventFilterBean.getFilters().add(
+				Restrictions.eq("category.id",new Integer(1)));
+		List<PublicEventPojo> events =  this.facade.getPublicEventList(
+				srcLocation, eventFilterBean, pagBean);
+		
+		assertEquals(3, pagBean.getNumElemTotal());
+	}
+	
+	@Test
+	public void testGetPublicEventsPaginated() throws FacadeException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		
+		this.facade.getPublicEventList(
+				srcLocation, eventFilterBean, pagBean);
+		
+		assertEquals(9, pagBean.getNumElemTotal());
+	}
+	
+	@Test
+	public void testAllEventsPaginated() throws FacadeException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		this.facade.getAllEventList(srcLocation,
+				eventFilterBean, pagBean);
+		
+		assertEquals(13, pagBean.getNumElemTotal());
 	}
 	
 	// http://www.movable-type.co.uk/scripts/latlong.html

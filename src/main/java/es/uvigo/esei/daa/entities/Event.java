@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Columns;
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(name = "event")
-public class Event implements Serializable {
+public class Event implements Serializable, Comparable<Event> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,6 +62,11 @@ public class Event implements Serializable {
 	private EventStatus status;
 	@Enumerated(EnumType.STRING)
 	private Visibility visibility;
+	
+	// Is used for store distance between a source location given
+	// and the destiny event location
+	@Transient
+	private double distanceFromSrc;
 
 	@ManyToOne
 	@JsonBackReference
@@ -82,6 +88,8 @@ public class Event implements Serializable {
 	@NotNull
 	private Category category;
 
+	
+	
 	public Category getCategory() {
 		return category;
 	}
@@ -177,4 +185,21 @@ public class Event implements Serializable {
 	public int getNumAssistants() {
 		return assistants.size();
 	}
+
+	@Override
+	public int compareTo(Event e) {
+		if (e.distanceFromSrc == this.distanceFromSrc)
+			return 0;
+		else 
+			return this.distanceFromSrc > e.distanceFromSrc ? 1 : -1;
+	}
+	
+	public double getDistanceFromSrc() {
+		return distanceFromSrc;
+	}
+
+	public void setDistanceFromSrc(double distanceFromSrc) {
+		this.distanceFromSrc = distanceFromSrc;
+	}
+
 }
