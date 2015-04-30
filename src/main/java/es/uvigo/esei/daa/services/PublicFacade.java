@@ -35,36 +35,6 @@ public class PublicFacade {
 	@Autowired
 	private UsersDAO userDao;
 
-	public List<PublicEventPojo> getPublicEventList(String categoryId)
-			throws FacadeException {
-		List<Event> list = null;
-		
-		list = eventDao.getPublicEvents(categoryId);
-
-		List<PublicEventPojo> listEventPojo = new ArrayList<PublicEventPojo>();
-		for (Event event : list) {
-			PublicEventPojo pojo = new PublicEventPojo(event);
-			listEventPojo.add(pojo);
-		}
-
-		return listEventPojo;
-	}
-
-	public List<AllEventPojo> getAllEventList(String categoryId)
-			throws FacadeException {
-		List<Event> list = null;
-		
-		list = eventDao.getAllEvents(categoryId);
-
-		List<AllEventPojo> listEventPojo = new ArrayList<AllEventPojo>();
-		for (Event event : list) {
-			AllEventPojo pojo = new AllEventPojo(event);
-			listEventPojo.add(pojo);
-		}
-
-		return listEventPojo;
-	}
-
 	public List<PublicEventPojo> getPublicEventList(Location srcLocation,
 			EventFilterBean eventFilter,
 			PagBean pagBean

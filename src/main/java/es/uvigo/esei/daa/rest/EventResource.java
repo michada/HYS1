@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -40,67 +41,44 @@ public class EventResource {
 
 	@GET
 	public Response list(@CookieParam("token") String token,
-			@PathParam("categoryId") String categoryId) {
+			@PathParam("categoryId") String categoryId,
+			@QueryParam("latitude") String latitude,
+			@QueryParam("longitude") String longitude) {
 		try {
+			// Location
+			Location srcLocation = getParsedLocation(latitude, longitude);
+			
+			// Filter
+			EventFilterBean eventFilter = new EventFilterBean();
+			Integer categoryIdNumber = null;
+			try {
+				categoryIdNumber = Integer.parseInt(categoryId);
+			} catch (NumberFormatException ex) {
+				categoryIdNumber = 0;
+				LOG.info("None category specified. Show all...");
+			}
+			if (categoryIdNumber > 0) {
+				eventFilter.getFilters().add(
+						Restrictions.eq("category.id",
+								Integer.parseInt(categoryId)));
+			}
+
+			// Paginator
+			PagBean pagBean = new PagBean();
+			// TODO PARAMETRIZAR ESTO
+			pagBean.setNumPag(0);
+			pagBean.setNumElemPag(5);
+
+			
 			if (facade.checkToken(token) == null) {
-				//List<PublicEventPojo> list = this.facade
-				//		.getPublicEventList(categoryId);
-				
-				Location srcLocation = new Location();
-				srcLocation.setLatitude(0.0);
-				srcLocation.setLongitude(0.0);
-				
-				EventFilterBean eventFilter = new EventFilterBean();
-				Integer categoryIdNumber = null;
-				try {
-					categoryIdNumber = Integer.parseInt(categoryId);
-				} catch (NumberFormatException ex) {
-					categoryIdNumber = 0;
-					LOG.info("None category specified. Show all...");
-				}
-				if (categoryIdNumber > 0) {
-					eventFilter.getFilters().add(Restrictions.eq("category.id", 
-						Integer.parseInt(categoryId)));
-				}
-				
-				PagBean pagBean = new PagBean();
-				// TODO PARAMETRIZAR ESTO
-				pagBean.setNumPag(0);
-				pagBean.setNumElemPag(5);
-				
-				List<PublicEventPojo> list = this.facade
-					.getPublicEventList(srcLocation, eventFilter, pagBean);
-				
+				List<PublicEventPojo> list = this.facade.getPublicEventList(
+						srcLocation, eventFilter, pagBean);
+
 				return Response.ok(list, MediaType.APPLICATION_JSON).build();
 			} else {
-				//List<AllEventPojo> list = this.facade
-				//		.getAllEventList(categoryId);
-				
-				Location srcLocation = new Location();
-				srcLocation.setLatitude(0.0);
-				srcLocation.setLongitude(0.0);
-				
-				EventFilterBean eventFilter = new EventFilterBean();
-				Integer categoryIdNumber = null;
-				try {
-					categoryIdNumber = Integer.parseInt(categoryId);
-				} catch (NumberFormatException ex) {
-					categoryIdNumber = 0;
-					LOG.info("None category specified. Show all...");
-				}
-				if (categoryIdNumber > 0) {
-					eventFilter.getFilters().add(Restrictions.eq("category.id", 
-						Integer.parseInt(categoryId)));
-				}
-				
-				PagBean pagBean = new PagBean();
-				// TODO PARAMETRIZAR ESTO
-				pagBean.setNumPag(0);
-				pagBean.setNumElemPag(5);
-				
-				List<AllEventPojo> list = this.facade
-						.getAllEventList(srcLocation, eventFilter, pagBean);
-				
+				List<AllEventPojo> list = this.facade.getAllEventList(
+				srcLocation, eventFilter, pagBean);
+
 				return Response.ok(list, MediaType.APPLICATION_JSON).build();
 			}
 
@@ -108,5 +86,18 @@ public class EventResource {
 			LOG.log(Level.SEVERE, "Error listing events", e);
 			return Response.serverError().entity(e.getMessage()).build();
 		}
+	}
+
+	private Location getParsedLocation(String latitude, String longitude) {
+		Location srcLocation = null;
+		try {
+			Location locationTmp = new Location();
+			locationTmp.setLatitude(Double.parseDouble(latitude));
+			locationTmp.setLongitude(Double.parseDouble(longitude));
+			srcLocation = locationTmp;
+		} catch (NumberFormatException e) {
+			LOG.info("None location specified. Show all...");
+		}
+		return srcLocation;
 	}
 }

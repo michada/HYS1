@@ -18,9 +18,9 @@
 							Dropdown</span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="#" ng-click="getEventData(0, 'All')">All</a></li>
+						<li><a href="#" ng-click="getEventData(latitude, longitude, 0, 'All')">All</a></li>
 						<li ng-repeat="c in categories"><a href="#"
-							ng-click="getEventData(c.id, c.name)">{{c.name}}</a></li>
+							ng-click="getEventData(latitude, longitude, c.id, c.name)">{{c.name}}</a></li>
 					</ul>
 				</div>
 				<div class="btn-group filters">
