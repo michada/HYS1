@@ -4,7 +4,7 @@
 <%@ include file="imports/head.jsp"%>
 <title>Login - Have You Seen?</title>
 </head>
-<body ng-controller="eventController">
+<body ng-controller="loginController">
 	<%@ include file="imports/menu.jsp"%>
 	<div class="intro-margin"></div>
 	<div class="content-section-a">

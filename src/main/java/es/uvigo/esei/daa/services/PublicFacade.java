@@ -28,16 +28,18 @@ import es.uvigo.esei.daa.util.LocationUtil;
 public class PublicFacade {
 	@Autowired
 	private CategoryDAO categoryDao;
-	
+
 	@Autowired
 	private EventDAO eventDao;
 
 	@Autowired
 	private UsersDAO userDao;
 
-	public List<PublicEventPojo> getPublicEventList() throws FacadeException {
+	public List<PublicEventPojo> getPublicEventList(String categoryId)
+			throws FacadeException {
 		List<Event> list = null;
-		list = eventDao.getPublicEvents();
+		
+		list = eventDao.getPublicEvents(categoryId);
 
 		List<PublicEventPojo> listEventPojo = new ArrayList<PublicEventPojo>();
 		for (Event event : list) {
@@ -48,9 +50,11 @@ public class PublicFacade {
 		return listEventPojo;
 	}
 
-	public List<AllEventPojo> getAllEventList() throws FacadeException {
+	public List<AllEventPojo> getAllEventList(String categoryId)
+			throws FacadeException {
 		List<Event> list = null;
-		list = eventDao.getAllEvents();
+		
+		list = eventDao.getAllEvents(categoryId);
 
 		List<AllEventPojo> listEventPojo = new ArrayList<AllEventPojo>();
 		for (Event event : list) {
@@ -107,14 +111,14 @@ public class PublicFacade {
 		}
 		return login;
 	}
-	
+
 	public boolean checkDistance(Location l1, Location l2, Double distance) {
 		return LocationUtil.checkDistance(l1, l2, distance);
 	}
 	
-	public List<PublicCategoryPojo> getCategories() {
+	public List<PublicCategoryPojo> getCategoryList() throws FacadeException {
 		List<Category> list = null;
-		list = categoryDao.getPublicEvents();
+		list = categoryDao.getCategories();
 
 		List<PublicCategoryPojo> listCategoryPojo = new ArrayList<PublicCategoryPojo>();
 		for (Category category : list) {

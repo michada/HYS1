@@ -11,7 +11,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.SimpleExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,22 +27,43 @@ public class EventDAO extends DAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public List<Event> getPublicEvents() {
+	public List<Event> getPublicEvents(String categoryId) {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from Event e where e.visibility = 'PUBLIC' order by e.date ASC";
-		Query query = session.createQuery(hql);
+		Query query = null;
+
+		System.out.println(categoryId);
+
+		if (!categoryId.equals("0")) {
+			String hql = "from Event e where e.category.id = :categoryId and e.visibility = 'PUBLIC' order by e.date ASC";
+			query = session.createQuery(hql);
+			query.setString("categoryId", categoryId);
+		} else {
+			String hql = "from Event e where e.visibility = 'PUBLIC' order by e.date ASC";
+			query = session.createQuery(hql);
+		}
+
+		List<Event> eventList = query.list();
+		return eventList;
+	}
+	public List<Event> getAllEvents(String categoryId) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		Query query = null;
+
+		if (!categoryId.equals("0")) {
+			String hql = "from Event e where e.category.id = :categoryId order by e.date ASC";
+			query = session.createQuery(hql);
+			query.setString("categoryId", categoryId);
+		} else {
+			String hql = "from Event e order by e.date ASC";
+			query = session.createQuery(hql);
+		}
+
 		List<Event> eventList = query.list();
 		return eventList;
 	}
 
-	public List<Event> getAllEvents() {
-		Session session = sessionFactory.getCurrentSession();
-		String hql = "from Event e order by e.date ASC";
-		Query query = session.createQuery(hql);
-		List<Event> eventList = query.list();
-		return eventList;
-	}
-
+	
 	public List<Event> listEvents(EventFilterBean eventFilterBean,
 			PagBean pagBean) {
 		Session session = sessionFactory.getCurrentSession();

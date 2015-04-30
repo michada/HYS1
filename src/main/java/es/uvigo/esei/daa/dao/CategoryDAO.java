@@ -18,7 +18,7 @@ public class CategoryDAO extends DAO {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public List<Category> getPublicEvents() {
+	public List<Category> getCategories() {
 		Session session = sessionFactory.getCurrentSession();
 		String hql = "from Category";
 		Query query = session.createQuery(hql);
