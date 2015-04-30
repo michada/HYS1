@@ -42,6 +42,11 @@ public class Location implements Serializable {
 	@JsonManagedReference
 	private List<Event> events;
 
+	
+	public Location(){
+		
+	}
+	
 	public double getLongitude() {
 		return longitude;
 	}

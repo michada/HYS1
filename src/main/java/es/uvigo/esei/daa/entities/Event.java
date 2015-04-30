@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,6 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -49,6 +52,7 @@ public class Event implements Serializable {
 	private int id;
 	@NotNull
 	private String title;
+	@Column(columnDefinition="Text")
 	private String description;
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)

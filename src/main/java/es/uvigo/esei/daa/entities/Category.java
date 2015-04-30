@@ -34,6 +34,10 @@ public class Category {
 	@JsonManagedReference
 	private List<Event> events;
 
+	public Category(){
+		
+	}
+	
 	public int getId() {
 		return id;
 	}

@@ -70,7 +70,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 
 	@Test
 	public void testAllList() throws Exception {
-		verifyXpathCount("//tr", 6);
+		verifyXpathCount("//tr", 9);
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 2);
+		verifyXpathCount("//tr[@class='ng-scope']", 1);
 	}
 
 	@Test
@@ -109,7 +109,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 3);
+		verifyXpathCount("//tr[@class='ng-scope']", 6);
 	}
 	
 	@Test

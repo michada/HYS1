@@ -70,7 +70,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 
 	@Test
 	public void testAllList() throws Exception {
-		verifyXpathCount("//tr", 8);
+		verifyXpathCount("//tr", 13);
 	}
 	
 	@Test
@@ -109,7 +109,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 3);
+		verifyXpathCount("//tr[@class='ng-scope']", 8);
 	}
 	
 	@Test

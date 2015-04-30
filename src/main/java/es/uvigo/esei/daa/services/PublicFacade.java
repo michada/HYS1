@@ -36,6 +36,9 @@ public class PublicFacade {
 		}
 
 		return listEventPojo;
+//		return eventDao.getPublicEvents().stream()
+//			.map(PublicEventPojo::new)
+//		.collect(toList());
 	}
 
 	public List<AllEventPojo> getAllEventList() throws FacadeException {
@@ -68,7 +71,6 @@ public class PublicFacade {
 		LatLng latLng1 = new LatLng(l1.getLatitude(), l1.getLongitude());
 		LatLng latLng2 = new LatLng(l2.getLatitude(), l2.getLongitude());
 		double module = latLng2.distance(latLng1);
-		
 		return module <= distance;
 	}
 }

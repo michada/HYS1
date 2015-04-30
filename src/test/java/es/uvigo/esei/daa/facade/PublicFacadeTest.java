@@ -49,12 +49,12 @@ public class PublicFacadeTest extends AbstractTestCase {
 
 	@Test
 	public void testGetPublicEvents() throws FacadeException {
-		assertEquals(6, this.facade.getPublicEventList().size());
+		assertEquals(9, this.facade.getPublicEventList().size());
 	}
 	
 	@Test
 	public void testAllEvents() throws FacadeException {
-		assertEquals(8, this.facade.getAllEventList().size());
+		assertEquals(13, this.facade.getAllEventList().size());
 	}
 	
 	// http://www.movable-type.co.uk/scripts/latlong.html
@@ -66,10 +66,10 @@ public class PublicFacadeTest extends AbstractTestCase {
 		l1.setLongitude(20.0);
 		
 		Location l2 = new Location();
-		l1.setLatitude(11.0);
-		l1.setLongitude(19.0);
+		l2.setLatitude(11.0);
+		l2.setLongitude(19.0);
 		
-		assertEquals(true, facade.checkDistance(l1, l2, 152.71));
+		assertEquals(true, facade.checkDistance(l1, l2, 156.0));
 	}
 	
 	@Test
@@ -80,8 +80,8 @@ public class PublicFacadeTest extends AbstractTestCase {
 		l1.setLongitude(0.0);
 		
 		Location l2 = new Location();
-		l1.setLatitude(10.0);
-		l1.setLongitude(20.0);
+		l2.setLatitude(10.0);
+		l2.setLongitude(20.0);
 		
 		assertEquals(true, facade.checkDistance(l1, l2, 3112.));
 	}
