@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -96,7 +97,10 @@ public class EventTest extends JerseyTest {
 
 	@Test
 	public void testList() throws IOException {
-		final Response response = target("event").request().get();
+		final Response response = target("event").request().
+				header("Content-Type", "application/json").acceptEncoding("UTF-8").
+				
+				get();
 		assertOkStatus(response);
 
 		final List<PublicEventPojo> events = response

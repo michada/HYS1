@@ -4,11 +4,13 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.web.filter.RequestContextFilter;
 
+import es.uvigo.esei.daa.rest.CategoryResource;
 import es.uvigo.esei.daa.rest.EventResource;
 
 public class HYS1Application extends ResourceConfig {
 	public HYS1Application() {
 		// register application resources
+		register(CategoryResource.class);
 		register(EventResource.class);
 		//register(SubjectResource.class);
 		

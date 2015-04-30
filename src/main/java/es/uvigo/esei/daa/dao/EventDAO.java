@@ -4,10 +4,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.SimpleExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +24,7 @@ import es.uvigo.esei.daa.util.LocationUtil;
 @Repository
 public class EventDAO extends DAO {
 	private final static Logger LOG = Logger.getLogger("EventDAO");
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -31,42 +35,49 @@ public class EventDAO extends DAO {
 		List<Event> eventList = query.list();
 		return eventList;
 	}
-	
-	public List<Event> getAllEvents(){
+
+	public List<Event> getAllEvents() {
 		Session session = sessionFactory.getCurrentSession();
 		String hql = "from Event e order by e.date ASC";
 		Query query = session.createQuery(hql);
 		List<Event> eventList = query.list();
 		return eventList;
 	}
-	
-	public List<Event> getAllEvents(
-			EventFilterBean eventFilterBean, 
+
+	public List<Event> listEvents(EventFilterBean eventFilterBean,
 			PagBean pagBean) {
-		List<Event> eventList = null;
 		Session session = sessionFactory.getCurrentSession();
 		
-		int firstElement = pagBean.getNumElemPag() 
-				* ( (pagBean.getNumPag() - 1) +1 );
+		// Get the count
+		Criteria criteriaTotal = session.createCriteria(Event.class);
+		// Filters
+		for (Criterion exp:eventFilterBean.getFilters()) {		
+				criteriaTotal.add(exp);
+		}
+		criteriaTotal.setProjection(Projections.rowCount());
+		pagBean.setNumElemTotal((Long)criteriaTotal.uniqueResult());
 		
-		eventList = session.createCriteria(Event.class).
-			setFirstResult(firstElement).
-			setMaxResults(pagBean.getNumElemPag()).
-			addOrder(Order.desc("date"))
-			.list();
-		
-		for (Event event:eventList) {
-			Location dstlocation = event.getLocation();
-			if (LocationUtil.checkDistance(eventFilterBean.getSrcLocation(),
-					dstlocation, eventFilterBean.getMaxDistance())) {
-				event.setDistanceFromSrc(
-						LocationUtil.getDistance(
-								eventFilterBean.getSrcLocation(),
-								dstlocation));
-			}
-		}	
-		Collections.sort(eventList);
-		
+		// Get the elements
+		Criteria criteria = session.createCriteria(Event.class)
+				.setFirstResult(pagBean.getFirstElement())
+				.setMaxResults(pagBean.getNumElemPag())
+				.addOrder(Order.asc("date"));
+		// Filters
+		for (Criterion exp:eventFilterBean.getFilters()) {		
+			criteria.add(exp);
+		}
+		@SuppressWarnings("unchecked")
+		List<Event> eventList = criteria.list();
+		orderByLocationDesc(eventList, eventFilterBean.getSrcLocation());
+
 		return eventList;
+	}
+
+	private void orderByLocationDesc(List<Event> eventList, Location srcLocation) {
+		for (Event event : eventList) {
+			event.setDistanceFromSrc(LocationUtil.getDistance(srcLocation,
+					event.getLocation()));
+		}
+		Collections.sort(eventList);
 	}
 }

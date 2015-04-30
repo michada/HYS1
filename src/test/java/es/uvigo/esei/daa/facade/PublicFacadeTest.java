@@ -2,7 +2,10 @@ package es.uvigo.esei.daa.facade;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,9 +16,13 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
+import es.uvigo.esei.daa.bean.EventFilterBean;
+import es.uvigo.esei.daa.bean.PagBean;
 import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.FacadeException;
 import es.uvigo.esei.daa.services.PublicFacade;
+import es.uvigo.esei.daa.services.pojo.AllEventPojo;
+import es.uvigo.esei.daa.util.LocationUtil;
 public class PublicFacadeTest extends AbstractTestCase {
 	@Autowired
 	private PublicFacade facade;
@@ -57,6 +64,65 @@ public class PublicFacadeTest extends AbstractTestCase {
 		assertEquals(8, this.facade.getAllEventList().size());
 	}
 	
+	@Test
+	public void testGetPublicEventsByCategory() throws FacadeException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		eventFilterBean.getFilters().add(
+				Restrictions.eq("category.id",new Integer(1)));
+		List<AllEventPojo> events =  this.facade.getPublicEventList(
+				eventFilterBean, pagBean);
+		
+		assertEquals(2, pagBean.getNumElemTotal());
+	}
+	
+	@Test
+	public void testGetPublicEventsPaginated() throws FacadeException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		this.facade.getPublicEventList(
+				eventFilterBean, pagBean);
+		
+		assertEquals(6, pagBean.getNumElemTotal());
+	}
+	
+	@Test
+	public void testAllEventsPaginated() throws FacadeException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		this.facade.getAllEventList(
+				eventFilterBean, pagBean);
+		
+		assertEquals(8, pagBean.getNumElemTotal());
+	}
+	
 	// http://www.movable-type.co.uk/scripts/latlong.html
 	@Test
 	public void testCheckDistanceIsIn() {
@@ -69,7 +135,7 @@ public class PublicFacadeTest extends AbstractTestCase {
 		l1.setLatitude(11.0);
 		l1.setLongitude(19.0);
 		
-		assertEquals(true, facade.checkDistance(l1, l2, 152.71));
+		assertEquals(true, LocationUtil.checkDistance(l1, l2, 152.71));
 	}
 	
 	@Test

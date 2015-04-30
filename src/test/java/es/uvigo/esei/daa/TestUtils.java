@@ -52,7 +52,10 @@ public final class TestUtils {
 
 	public static void clearTestDatabase() throws SQLException {
 		final String queries = new StringBuilder()
-				.append("DELETE FROM `event`;").append("DELETE FROM `user`;")
+				.append("DELETE FROM `event`;")
+				.append("DELETE FROM `user`;")
+				.append("DELETE FROM `location`;")
+				.append("DELETE FROM `category`;")
 				.toString();
 
 		final DataSource ds = createTestingDataSource();
@@ -67,15 +70,29 @@ public final class TestUtils {
 		final String queries = new StringBuilder()
 				.append("ALTER TABLE event AUTO_INCREMENT = 1;")
 				.append("ALTER TABLE user AUTO_INCREMENT = 1;")
+				.append("ALTER TABLE category AUTO_INCREMENT = 1;")
+				.append("ALTER TABLE location AUTO_INCREMENT = 1;")
+				.append("INSERT INTO category (id,name) VALUES (1, 'Libros');")
+				.append("INSERT INTO category (id,name) VALUES (2, 'Peliculas');")
+				.append("INSERT INTO category (id,name) VALUES (3, 'Cine');")
+				.append("INSERT INTO category (id,name) VALUES (4, 'Personajes');")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (1, 0.0, 0.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (2, 10.0, 10.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (3, 20.0, 20.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (4, 30.0, 30.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (5, 40.0, 40.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (6, 50.0, 50.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (7, 60.0, 60.0);")
+				.append("INSERT INTO location (id,latitude,longitude) VALUES (8, 70.0, 70.0);")
 				.append("INSERT INTO user (id,userName,password) VALUES (1, 'mrjato', '59189332a4abf8ddf66fde068cad09eb563b4bd974f7663d97ff6852a7910a73');")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (1,'2015-12-09','Howard','CANCELLED','Lacy','PUBLIC',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (2,'2015-12-09','Howard','CANCELLED','Lacy','PRIVATE',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (3,'2015-12-09','Howard','CANCELLED','Lacy','PRIVATE',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (4,'2015-12-09','Paco','COMPLETED','Porras','PUBLIC',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (5,'2015-12-09','Cosa','COMPLETED','Peposa','PUBLIC',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (6,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (7,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
-				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,culturalElement_id) VALUES (8,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (1,'2015-12-09','Howard','CANCELLED','Lacy','PUBLIC',1,1,1);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (2,'2015-12-09','Howard','CANCELLED','Lacy','PRIVATE',1,2,2);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (3,'2015-12-09','Howard','CANCELLED','Lacy','PRIVATE',1,3,3);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (4,'2015-12-09','Paco','COMPLETED','Porras','PUBLIC',1,4,4);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (5,'2015-12-09','Cosa','COMPLETED','Peposa','PUBLIC',1,5,1);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (6,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,6,2);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (7,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,7,3);")
+				.append("INSERT INTO event (id,date,description,status,title,visibility,creator_id,location_id,category_id) VALUES (8,'2015-12-09','Cosa','PROGRAMMED','Peposa','PUBLIC',1,8,4);")
 				.toString();
 
 		final DataSource ds = createTestingDataSource();
