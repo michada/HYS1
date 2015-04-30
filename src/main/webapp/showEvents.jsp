@@ -18,11 +18,9 @@
 							Dropdown</span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="#">Book</a></li>
-						<li><a href="#">Film</a></li>
-						<li><a href="#">Sport Event</a></li>
-						<li><a href="#">Theater</a></li>
-						<li><a href="#">TV Series</a></li>
+						<li><a href="#" ng-click="getEventData(0, 'All')">All</a></li>
+						<li ng-repeat="c in categories"><a href="#"
+							ng-click="getEventData(c.id, c.name)">{{c.name}}</a></li>
 					</ul>
 				</div>
 				<div class="btn-group filters">
@@ -44,6 +42,15 @@
 								ng-model="showEvents.cancelled"> Cancelled events</a></li>
 					</ul>
 				</div>
+				<form class="navbar-form navbar-right" style="margin-top:0px" role="search">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+			<div class="page-header">
+				<h3>Category: {{categoryName}}</h3>
 			</div>
 			<div class="content-section-a">
 				<div id="products" class="row list-group">

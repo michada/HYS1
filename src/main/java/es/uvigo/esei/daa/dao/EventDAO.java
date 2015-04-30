@@ -14,22 +14,42 @@ import es.uvigo.esei.daa.entities.Event;
 @Repository
 public class EventDAO extends DAO {
 	private final static Logger LOG = Logger.getLogger("EventDAO");
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public List<Event> getPublicEvents() {
+	public List<Event> getPublicEvents(String categoryId) {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from Event e where e.visibility = 'PUBLIC' order by e.date ASC";
-		Query query = session.createQuery(hql);
+		Query query = null;
+
+		System.out.println(categoryId);
+
+		if (!categoryId.equals("0")) {
+			String hql = "from Event e where e.category.id = :categoryId and e.visibility = 'PUBLIC' order by e.date ASC";
+			query = session.createQuery(hql);
+			query.setString("categoryId", categoryId);
+		} else {
+			String hql = "from Event e where e.visibility = 'PUBLIC' order by e.date ASC";
+			query = session.createQuery(hql);
+		}
+
 		List<Event> eventList = query.list();
 		return eventList;
 	}
-	
-	public List<Event> getAllEvents(){
+
+	public List<Event> getAllEvents(String categoryId) {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from Event e order by e.date ASC";
-		Query query = session.createQuery(hql);
+		Query query = null;
+
+		if (!categoryId.equals("0")) {
+			String hql = "from Event e where e.category.id = :categoryId order by e.date ASC";
+			query = session.createQuery(hql);
+			query.setString("categoryId", categoryId);
+		} else {
+			String hql = "from Event e order by e.date ASC";
+			query = session.createQuery(hql);
+		}
+
 		List<Event> eventList = query.list();
 		return eventList;
 	}

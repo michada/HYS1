@@ -11,7 +11,7 @@
 					[
 							'$scope',
 							'$http',
-							function($scope, $http, $routeParams) {
+							function($scope, $http) {
 								$scope.events = [];
 								$scope.showEvents = {
 									programmed : true,
@@ -19,13 +19,18 @@
 									cancelled : false
 								};
 
-								$scope.getEventData = function() {
-									$http.get('rest/event').success(
-											function(data) {
+								$scope.getEventData = function(categoryId,
+										categoryName) {
+									categoryId = typeof categoryId !== 'undefined' ? categoryId
+											: 0;
+									$scope.categoryName = typeof categoryName !== 'undefined' ? categoryName
+											: 'All';
+									$http.get('rest/event/' + categoryId)
+											.success(function(data) {
 												$scope.events = data;
 											}).error(function() {
-										alert("Event listing ERROR");
-									});
+												alert("Event listing ERROR");
+											});
 								};
 
 								$scope.getEventData();
@@ -36,27 +41,39 @@
 											|| (e.status == 'CANCELLED' && $scope.showEvents.cancelled);
 								};
 
-								$scope.getUrlVars = function getUrlVars() {
-									var vars = [], hash;
-									var hashes = window.location.href
-											.slice(
-													window.location.href
-															.indexOf('?') + 1)
-											.split('&');
-									for (var i = 0; i < hashes.length; i++) {
-										hash = hashes[i].split('=');
-										vars.push(hash[0]);
-										vars[hash[0]] = hash[1];
-									}
-									return vars;
+								$scope.getCategoryData = function() {
+									$http.get('rest/category').success(
+											function(data) {
+												$scope.categories = data;
+											}).error(function() {
+										alert("Category listing ERROR");
+									});
 								};
 
-								$scope.loginFail = false;
-								if ($scope.getUrlVars()["fail"] == "true") {
-									$scope.loginFail = true;
-								}
-
+								$scope.getCategoryData();
 							} ]);
+
+	app.controller('loginController', [
+			'$scope',
+			function($scope) {
+				$scope.getUrlVars = function getUrlVars() {
+					var vars = [], hash;
+					var hashes = window.location.href.slice(
+							window.location.href.indexOf('?') + 1).split('&');
+					for (var i = 0; i < hashes.length; i++) {
+						hash = hashes[i].split('=');
+						vars.push(hash[0]);
+						vars[hash[0]] = hash[1];
+					}
+					return vars;
+				};
+
+				$scope.loginFail = false;
+
+				if ($scope.getUrlVars()["fail"] == "true") {
+					$scope.loginFail = true;
+				}
+			} ]);
 
 	app.controller('cookieController', [ '$scope', '$cookieStore',
 			function($scope, $cookieStore) {
