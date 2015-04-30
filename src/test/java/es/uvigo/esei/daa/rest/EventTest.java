@@ -79,6 +79,7 @@ public class EventTest extends JerseyTest {
 		ResourceConfig rc = new ResourceConfig();
 
 		rc.register(EventResource.class);
+		rc.register(CategoryResource.class);
 
 		rc.register(RequestContextFilter.class);
 		rc.register(JacksonFeature.class);
@@ -98,8 +99,7 @@ public class EventTest extends JerseyTest {
 	@Test
 	public void testList() throws IOException {
 		final Response response = target("event").request().
-				header("Content-Type", "application/json").acceptEncoding("UTF-8").
-				
+				//header("Content-Type", "application/json").acceptEncoding("UTF-8").
 				get();
 		assertOkStatus(response);
 

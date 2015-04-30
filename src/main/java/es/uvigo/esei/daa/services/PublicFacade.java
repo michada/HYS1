@@ -65,19 +65,20 @@ public class PublicFacade {
 		return listEventPojo;
 	}
 
-	public List<AllEventPojo> getPublicEventList(
+	public List<PublicEventPojo> getPublicEventList(Location srcLocation,
 			EventFilterBean eventFilter,
 			PagBean pagBean
 			) throws FacadeException {
-		List<Event> list = null;
+		List<Event> list = null; 
 		
+		eventFilter.setSrcLocation(srcLocation);
 		eventFilter.getFilters().add(Restrictions.eq("visibility", 
 				Visibility.PUBLIC));
 		list = eventDao.listEvents(eventFilter, pagBean);
 
-		List<AllEventPojo> listEventPojo = new ArrayList<AllEventPojo>();
+		List<PublicEventPojo> listEventPojo = new ArrayList<PublicEventPojo>();
 		for (Event event : list) {
-			AllEventPojo pojo = new AllEventPojo(event);
+			PublicEventPojo pojo = new PublicEventPojo(event);
 			listEventPojo.add(pojo);
 		}
 
@@ -85,10 +86,13 @@ public class PublicFacade {
 	}
 	
 	public List<AllEventPojo> getAllEventList(
+			Location srcLocation,
 			EventFilterBean eventFilter,
 			PagBean pagBean
 			) throws FacadeException {
 		List<Event> list = null;
+		eventFilter.setSrcLocation(srcLocation);
+		
 		list = eventDao.listEvents(eventFilter, pagBean);
 
 		List<AllEventPojo> listEventPojo = new ArrayList<AllEventPojo>();
