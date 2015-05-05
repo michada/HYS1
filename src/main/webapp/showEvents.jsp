@@ -12,7 +12,7 @@
 			<div class="navigation">
 				<div class="btn-group">
 					<button type="button" class="btn btn-primary">Categories</button>
-					<button type="button" class="btn btn-primary dropdown-toggle"
+					<button type="button" id ="dropdown-toggle-categories" class="btn btn-primary dropdown-toggle"
 						data-toggle="dropdown" aria-expanded="false">
 						<span class="caret"></span> <span class="sr-only">Toggle
 							Dropdown</span>
@@ -25,7 +25,7 @@
 				</div>
 				<div class="btn-group filters">
 					<button type="button" class="btn btn-primary">Filters</button>
-					<button type="button" class="btn btn-primary dropdown-toggle"
+					<button type="button" id ="dropdown-toggle-filters" class="btn btn-primary dropdown-toggle"
 						data-toggle="dropdown" aria-expanded="false">
 						<span class="caret"></span> <span class="sr-only">Toggle
 							Dropdown</span>
@@ -54,8 +54,8 @@
 			</div>
 			<div class="content-section-a">
 				<div id="products" class="row list-group">
-					<div class="item  col-xs-4 col-lg-4" ng-repeat="e in events"
-						ng-show="isShown(e)">
+					<div class="event-item item  col-xs-4 col-lg-4" ng-repeat="e in events"
+						ng-if="isShown(e)">
 						<div class="thumbnail">
 							<img class="group list-group-image"
 								src="http://lorempixel.com/400/250/" alt="" />
