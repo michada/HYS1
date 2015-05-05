@@ -59,8 +59,7 @@
 								};
 
 								if (navigator.geolocation) {
-									var location_timeout = setTimeout(
-											geolocFail, 10000);
+								    var location_timeout = setTimeout(geolocFail, 500);
 
 									navigator.geolocation
 											.getCurrentPosition(
@@ -157,10 +156,10 @@
 				}
 			} ]);
 
-	app.controller('cookieController', [ '$scope', '$cookieStore',
-			function($scope, $cookieStore) {
+	app.controller('cookieController', [ '$scope', '$cookies',
+			function($scope, $cookies) {
 				$scope.existsToken = false;
-				var token = $cookieStore.get('token');
+				var token = $cookies.token;
 				if (!token) {
 					$scope.existsToken = false;
 				} else {

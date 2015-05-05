@@ -16,7 +16,7 @@ public class AllEventPojo implements Serializable {
 	private Date date;
 	private String status;
 	private int numAssistants;
-	private Visibility visibility;
+	private String visibility;
 	private LocationPojo location;
 	private CategoryPojo category;
 
@@ -31,7 +31,7 @@ public class AllEventPojo implements Serializable {
 		this.date = event.getDate();
 		this.status = event.getStatus().toString();
 		this.numAssistants = event.getNumAssistants();
-		this.visibility = event.getVisibility();
+		this.visibility = event.getVisibility().toString();
 		this.location = new LocationPojo(event.getLocation());
 		this.category = new CategoryPojo(event.getCategory());
 	}
@@ -100,11 +100,11 @@ public class AllEventPojo implements Serializable {
 		this.numAssistants = numAssistants;
 	}
 
-	public Visibility getVisibility() {
+	public String getVisibility() {
 		return visibility;
 	}
 
-	public void setVisibility(Visibility visibility) {
+	public void setVisibility(String visibility) {
 		this.visibility = visibility;
 	}
 }
