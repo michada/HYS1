@@ -18,52 +18,72 @@
 									completed : false,
 									cancelled : false
 								};
+								$scope.pagination = [];
 
-								$scope.getEventData = function(latitude, longitude, categoryId,
-										categoryName) {
+								$scope.getEventData = function(latitude,
+										longitude, categoryId, categoryName, page) {
 									categoryId = typeof categoryId !== 'undefined' ? categoryId
 											: 0;
 									$scope.categoryName = typeof categoryName !== 'undefined' ? categoryName
 											: 'All';
-									
+									page = typeof page !== 'undefined' ? page
+											: 1;
+
 									var urlEvents = "";
 									if (!latitude || !longitude) {
-										urlEvents = 'rest/event/' + categoryId;
-									} else { 
-									   urlEvents = 'rest/event/' + categoryId + 
-											'?latitude=' + latitude + '&longitude=' + longitude;
+										urlEvents = 'rest/event/' + categoryId + '?page=' + page;
+									} else {
+										urlEvents = 'rest/event/' + categoryId
+												+ '?latitude=' + latitude
+												+ '&longitude=' + longitude
+												+ '&page=' + page;
+										if($scope.showEvents.programmed) {
+											+ '&filters=programmed';
+										}
+										if($scope.showEvents.completed) {
+											+ '&filters=completed';
+										}
+										if($scope.showEvents.cancelled) {
+											+ '&filters=cancelled';
+										}
 									}
-									
-									$http.get(urlEvents)
-											.success(function(data) {
-												$scope.events = data;
+
+									$http.get(urlEvents).success(
+											function(data) {
+												$scope.pagination = data[0];
+												$scope.range = buildRange(new Array(),  Math.ceil($scope.pagination.numElemTotal / $scope.pagination.numElemPag));
+												$scope.events = data[1];
 											}).error(function() {
-												alert("Event listing ERROR");
-											});
+										alert("Event listing ERROR");
+									});
 								};
 
 								if (navigator.geolocation) {
-								    var location_timeout = setTimeout(geolocFail, 10000);
+									var location_timeout = setTimeout(
+											geolocFail, 10000);
 
-								    navigator.geolocation.getCurrentPosition(function(position) {
-								        clearTimeout(location_timeout);
+									navigator.geolocation
+											.getCurrentPosition(
+													function(position) {
+														clearTimeout(location_timeout);
 
-								        $scope.latitude = position.coords.latitude;
-								        $scope.longitude = position.coords.longitude;
-								        
+														$scope.latitude = position.coords.latitude;
+														$scope.longitude = position.coords.longitude;
 
-										$scope.getEventData($scope.latitude, $scope.longitude);
-								    }, function(error) {
-								        alert("inside error ");
-								        clearTimeout(location_timeout);
-								        geolocFail();
-								       });
+														$scope
+																.getEventData(
+																		$scope.latitude,
+																		$scope.longitude);
+													},
+													function(error) {
+														clearTimeout(location_timeout);
+														geolocFail();
+													});
 								} else {
-								    // Fallback for no geolocation
-								    geolocFail();
+									geolocFail();
 								}
-								
-								function geolocFail(categoryId, categoryName){
+
+								function geolocFail(categoryId, categoryName) {
 									$scope.getEventData('', '');
 								}
 
@@ -81,6 +101,36 @@
 										alert("Category listing ERROR");
 									});
 								};
+
+								$scope.search = function(latitude, longitude) {
+									text = $('#search').val();
+
+									var urlEvents = 'rest/event/0';
+									if (latitude && longitude) {
+										urlEvents += '?latitude=' + latitude
+												+ '&longitude=' + longitude
+												+ '&text=' + text;
+									} else {
+										urlEvents += '?text=' + text;
+									}
+
+									$http
+											.get(urlEvents)
+											.success(
+													function(data) {
+														$scope.pagination = data[0];
+														$scope.events = data[1];
+													}).error(function() {
+												alert("Event listing ERROR");
+											});
+								};
+
+								function buildRange(input, total) {
+									total = parseInt(total);
+									for (var i = 0; i < total; i++)
+										input.push(i + 1);
+									return input;
+								}
 
 								$scope.getCategoryData();
 							} ]);

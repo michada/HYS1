@@ -1,5 +1,6 @@
 package es.uvigo.esei.daa.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,11 +44,13 @@ public class EventResource {
 	public Response list(@CookieParam("token") String token,
 			@PathParam("categoryId") String categoryId,
 			@QueryParam("latitude") String latitude,
-			@QueryParam("longitude") String longitude) {
+			@QueryParam("longitude") String longitude,
+			@QueryParam("text") String text, @QueryParam("page") String page,
+			@QueryParam("filters") String[] filters) {
 		try {
 			// Location
 			Location srcLocation = getParsedLocation(latitude, longitude);
-			
+
 			// Filter
 			EventFilterBean eventFilter = new EventFilterBean();
 			Integer categoryIdNumber = null;
@@ -62,24 +65,46 @@ public class EventResource {
 						Restrictions.eq("category.id",
 								Integer.parseInt(categoryId)));
 			}
+			if (text != null) {
+				eventFilter.getFilters().add(
+						Restrictions.or(
+								Restrictions.like("title", "%" + text + "%"),
+								Restrictions.like("description", "%" + text
+										+ "%")));
 
-			// Paginator
+				eventFilter.getFilters().add(
+						Restrictions.or(Restrictions.eq("status", filters[0]),
+								Restrictions.eq("status", filters[1]),
+								Restrictions.eq("status", filters[2])));
+			}
+
 			PagBean pagBean = new PagBean();
-			// TODO PARAMETRIZAR ESTO
-			pagBean.setNumPag(0);
-			pagBean.setNumElemPag(15);
 
-			
+			try {
+				pagBean.setNumPag(Integer.parseInt(page) - 1);
+			} catch (NumberFormatException e) {
+				pagBean.setNumPag(0);
+			}
+
+			pagBean.setNumElemPag(1);
+
+			List<Object> toret = new ArrayList<Object>();
+			toret.add(pagBean);
+
 			if (facade.checkToken(token) == null) {
 				List<PublicEventPojo> list = this.facade.getPublicEventList(
 						srcLocation, eventFilter, pagBean);
 
-				return Response.ok(list, MediaType.APPLICATION_JSON).build();
+				toret.add(list);
+
+				return Response.ok(toret, MediaType.APPLICATION_JSON).build();
 			} else {
 				List<AllEventPojo> list = this.facade.getAllEventList(
-				srcLocation, eventFilter, pagBean);
+						srcLocation, eventFilter, pagBean);
 
-				return Response.ok(list, MediaType.APPLICATION_JSON).build();
+				toret.add(list);
+
+				return Response.ok(toret, MediaType.APPLICATION_JSON).build();
 			}
 
 		} catch (FacadeException e) {

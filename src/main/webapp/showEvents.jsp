@@ -18,9 +18,10 @@
 							Dropdown</span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="#" ng-click="getEventData(latitude, longitude, 0, 'All')">All</a></li>
+						<li><a href="#"
+							ng-click="getEventData(latitude, longitude, 0, 'All', 1)">All</a></li>
 						<li ng-repeat="c in categories"><a href="#"
-							ng-click="getEventData(latitude, longitude, c.id, c.name)">{{c.name}}</a></li>
+							ng-click="getEventData(latitude, longitude, c.id, c.name, 1)">{{c.name}}</a></li>
 					</ul>
 				</div>
 				<div class="btn-group filters">
@@ -42,11 +43,14 @@
 								ng-model="showEvents.cancelled"> Cancelled events</a></li>
 					</ul>
 				</div>
-				<form class="navbar-form navbar-right" style="margin-top:0px" role="search">
+				<form class="navbar-form navbar-right" style="margin-top: 0px"
+					role="search">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Search">
+						<input type="text" class="form-control" placeholder="Search"
+							id="search">
 					</div>
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="submit" class="btn btn-primary"
+						ng-click="search(latitude, longitude)">Submit</button>
 				</form>
 			</div>
 			<div class="page-header">
@@ -86,6 +90,13 @@
 						</div>
 					</div>
 				</div>
+				<nav>
+					<ul class="pagination">
+						<li ng-class="{disabled: pagination.numPag != 1}"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+						<li ng-repeat="n in range" ng-class="{active: pagination.numPag + 1 == n}" ng-click="getEventData(latitude, longitude, 0, 'All', n)"><a href="#">{{n}}</a></li>
+						<li ng-class="{disabled: pagination.numPag != pagination.numElemPag * pagination.numElemTotal}"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</div>
