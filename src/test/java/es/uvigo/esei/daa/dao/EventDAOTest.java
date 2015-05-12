@@ -52,16 +52,6 @@ public class EventDAOTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testGetPublicEvents() throws DAOException {
-		//assertEquals(9, this.dao.getPublicEvents().size());
-	}
-	
-	@Test
-	public void testAllEvents() throws DAOException {
-		//assertEquals(13, this.dao.getAllEvents().size());
-	}
-	
-	@Test
 	public void testListEvents() throws DAOException {
 		PagBean pagBean = new PagBean();
 		pagBean.setNumElemPag(5);
@@ -76,5 +66,28 @@ public class EventDAOTest extends AbstractTestCase {
 		
 		assertEquals(5, this.dao.listEvents(
 				eventFilterBean, pagBean).size());
+	}
+	
+	/**
+	 * Check if the number of total elements is such as expected
+	 * @throws DAOException
+	 */
+	@Test
+	public void testListEventsNumElemsTotal() throws DAOException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		this.dao.listEvents(
+				eventFilterBean, pagBean);
+		
+		assertEquals(13, pagBean.getNumElemTotal());
 	}
 }
