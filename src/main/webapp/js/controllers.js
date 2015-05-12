@@ -59,9 +59,9 @@
 									$scope.loading = true;
 									$http.get(urlEvents).success(
 											function(data) {
-												$scope.pagination = data[0];
+												$scope.pagination = data.pageBean;
 												$scope.range = buildRange(new Array(),  Math.ceil($scope.pagination.numElemTotal / $scope.pagination.numElemPag));
-												$scope.events = data[1];
+												$scope.events = data.listEvents;
 												$scope.loading = false;
 											}).error(function() {
 										alert("Event listing ERROR");

@@ -88,6 +88,6 @@ public class EventDAOTest extends AbstractTestCase {
 		this.dao.listEvents(
 				eventFilterBean, pagBean);
 		
-		assertEquals(13, pagBean.getNumElemTotal());
+		assertEquals(31, pagBean.getNumElemTotal());
 	}
 }

@@ -88,7 +88,7 @@ public class PublicFacadeTest extends AbstractTestCase {
 		this.facade.getPublicEventList(
 				srcLocation, eventFilterBean, pagBean);
 		
-		assertEquals(9, pagBean.getNumElemTotal());
+		assertEquals(19, pagBean.getNumElemTotal());
 	}
 	
 	@Test
@@ -107,7 +107,7 @@ public class PublicFacadeTest extends AbstractTestCase {
 		this.facade.getAllEventList(srcLocation,
 				eventFilterBean, pagBean);
 		
-		assertEquals(13, pagBean.getNumElemTotal());
+		assertEquals(31, pagBean.getNumElemTotal());
 	}
 	
 	// http://www.movable-type.co.uk/scripts/latlong.html

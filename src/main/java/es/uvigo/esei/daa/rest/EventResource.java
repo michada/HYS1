@@ -1,6 +1,5 @@
 package es.uvigo.esei.daa.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +13,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,9 @@ import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.FacadeException;
 import es.uvigo.esei.daa.services.PublicFacade;
 import es.uvigo.esei.daa.services.pojo.AllEventPojo;
+import es.uvigo.esei.daa.services.pojo.AllEventPojoPag;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
+import es.uvigo.esei.daa.services.pojo.PublicEventPojoPag;
 
 @Component
 @Path("/event/{categoryId}")
@@ -96,23 +96,28 @@ public class EventResource {
 
 			pagBean.setNumElemPag(NUM_ELEMENTS_PER_PAG);
 
-			List<Object> toret = new ArrayList<Object>();
-			toret.add(pagBean);
-
+			//List<Object> toret = new ArrayList<Object>();
+			
 			if (facade.checkToken(token) == null) {
+				PublicEventPojoPag publicEvents = new PublicEventPojoPag();
+				
 				List<PublicEventPojo> list = this.facade.getPublicEventList(
 						srcLocation, eventFilter, pagBean);
 
-				toret.add(list);
-
-				return Response.ok(toret, MediaType.APPLICATION_JSON).build();
+				publicEvents.setListEvents(list);
+				publicEvents.setPageBean(pagBean);
+				
+				return Response.ok(publicEvents, MediaType.APPLICATION_JSON).build();
 			} else {
+				AllEventPojoPag privateEvents = new AllEventPojoPag();
+				
 				List<AllEventPojo> list = this.facade.getAllEventList(
 						srcLocation, eventFilter, pagBean);
 
-				toret.add(list);
+				privateEvents.setListEvents(list);
+				privateEvents.setPageBean(pagBean);
 
-				return Response.ok(toret, MediaType.APPLICATION_JSON).build();
+				return Response.ok(privateEvents, MediaType.APPLICATION_JSON).build();
 			}
 
 		} catch (FacadeException e) {

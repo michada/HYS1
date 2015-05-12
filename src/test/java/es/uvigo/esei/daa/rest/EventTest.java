@@ -23,7 +23,9 @@ import org.springframework.web.filter.RequestContextFilter;
 
 import es.uvigo.esei.daa.TestUtils;
 import es.uvigo.esei.daa.services.pojo.AllEventPojo;
+import es.uvigo.esei.daa.services.pojo.AllEventPojoPag;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
+import es.uvigo.esei.daa.services.pojo.PublicEventPojoPag;
 
 public class EventTest extends JerseyTest {
 	@BeforeClass
@@ -79,12 +81,17 @@ public class EventTest extends JerseyTest {
 	@Test
 	public void testPublicList() throws IOException {
 
-		final Response response = target("event/0?page=1&filters=programmed&filters=cancelled&filters=completed").request().
+		final Response response = target("event/0?page=1&filters=programmed&filters=cancelled&filters=completed").
+				request().
 				get();
 		assertOkStatus(response);
-		final List<PublicEventPojo> events = response
-				.readEntity(new GenericType<List<PublicEventPojo>>() {
+		
+		PublicEventPojoPag eventsPag = response
+				.readEntity(new GenericType<PublicEventPojoPag>() {
 				});
+		
+		final List<PublicEventPojo> events = eventsPag.getListEvents();
+		
 		assertEquals(9, events.size());
 	}
 
@@ -95,10 +102,12 @@ public class EventTest extends JerseyTest {
 				.cookie("token", "T21hcjpMdWNhcw==").get();
 		assertOkStatus(response);
 		
-		final List<AllEventPojo> events = response
-				.readEntity(new GenericType<List<AllEventPojo>>() {
-				});
-		assertEquals(13, events.size());
+		AllEventPojoPag eventsPag = response
+			.readEntity(new GenericType<AllEventPojoPag>(){});
+		
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+		
+		assertEquals(15, events.size());
 	}
 	
 	@Test
@@ -106,8 +115,10 @@ public class EventTest extends JerseyTest {
 		final WebTarget target = target("event/0?text=terror&filters=cancelled&page=1");
 		final Response response = target.request()
 				.get();
-		final List<PublicEventPojo> events = response
-				.readEntity(new GenericType<List<PublicEventPojo>>(){});
+		PublicEventPojoPag eventsPag = response
+				.readEntity(new GenericType<PublicEventPojoPag>() {
+				});
+		final List<PublicEventPojo> events = eventsPag.getListEvents();	
 		assertEquals(1, events.size());
 	}
 	
@@ -116,8 +127,10 @@ public class EventTest extends JerseyTest {
 		final WebTarget target = target("event/1?text=xyxy&filters=cancelled&filters=programmed&page=1");
 		final Response response = target.request()
 				.get();
-		final List<PublicEventPojo> events = response
-				.readEntity(new GenericType<List<PublicEventPojo>>(){});
+		PublicEventPojoPag eventsPag = response
+				.readEntity(new GenericType<PublicEventPojoPag>() {
+				});
+		final List<PublicEventPojo> events = eventsPag.getListEvents();	
 		assertEquals(1, events.size());
 	}
 	
@@ -128,9 +141,11 @@ public class EventTest extends JerseyTest {
 				.cookie("token", "T21hcjpMdWNhcw==").get();
 		assertOkStatus(response);
 		
-		final List<AllEventPojo> events = response
-				.readEntity(new GenericType<List<AllEventPojo>>() {
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
 				});
+		
+		final List<AllEventPojo> events = eventsPag.getListEvents();
 		assertEquals(1, events.size());
 	}
 	
