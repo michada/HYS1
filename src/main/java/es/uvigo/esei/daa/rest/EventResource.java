@@ -35,6 +35,8 @@ import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 public class EventResource {
 	private final static Logger LOG = Logger.getLogger(EventResource.class
 			.getSimpleName());
+	
+	private final int NUM_ELEMENTS_PER_PAG = 15;
 
 	@Autowired
 	private PublicFacade facade;
@@ -92,7 +94,7 @@ public class EventResource {
 				pagBean.setNumPag(0);
 			}
 
-			pagBean.setNumElemPag(1);
+			pagBean.setNumElemPag(NUM_ELEMENTS_PER_PAG);
 
 			List<Object> toret = new ArrayList<Object>();
 			toret.add(pagBean);
