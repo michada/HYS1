@@ -1,16 +1,20 @@
 package es.uvigo.esei.daa.bean;
 
+import java.io.Serializable;
+
 
 /**
  * Esta clase se utiliza para guardar datos de paginacion
  * 
  * @author Miguel Callon
  */
-public class PagBean {
+@SuppressWarnings("serial")
+public class PagBean implements Serializable {
 	private int numPag; // Numero de pagina seleccionada
 	private int numElemPag; // Numero de elementos que se muestran en una pagina
 	private long numElemTotal; // Numero total de elementos
-
+	private int firstElement;
+	
 	public PagBean() {
 		
 	}
