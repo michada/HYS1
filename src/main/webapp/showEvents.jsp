@@ -67,7 +67,7 @@
 			</div>
 			<div class="content-section-a">
 					<div ng-show="loading">
-						<div class="event-item item  col-xs-4 col-lg-4" >
+						<div class="item  col-xs-4 col-lg-4" >
 							<img class="img-responsive" src="img/loading.gif" alt="">
 						</div>
 					</div>
@@ -109,14 +109,14 @@
 								<nav>
 									<ul class="pagination">
 										<!-- <li ng-class="{disabled: pagination.numPag != 1}"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li> -->
-										<li ng-repeat="n in range" ng-class="{active: pagination.numPag + 1 == n}" ng-click="paging(n)"><a href="#">{{n}}</a></li>
+										<li ng-repeat="n in range" id="page{{n}}" ng-class="{active: pagination.numPag + 1 == n}" ng-click="paging(n)"><a href="#">{{n}}</a></li>
 										<!-- <li ng-class="{disabled: pagination.numPag != pagination.numElemPag * pagination.numElemTotal}"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li> -->
 									</ul>
 								</nav>
 							</div>
 							
-							<div ng-show="events.length == 0">
-								<div class="event-item item  col-xs-4 col-lg-4" >
+							<div ng-if="events.length == 0">
+								<div class="event-not-found item  col-xs-4 col-lg-4" >
 									<div class="thumbnail">
 										<h5>&nbsp;&nbsp;&nbsp;Oh! Unfortunately, no results were found.</h5>
 									</div>
@@ -124,13 +124,6 @@
 							</div>
 						</div>
 				</div>
-				<nav>
-					<ul class="pagination">
-						<li ng-class="{disabled: pagination.numPag != 1}"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-						<li ng-repeat="n in range" id="page{{n}}" ng-class="{active: pagination.numPag + 1 == n}" ng-click="getEventData(latitude, longitude, 0, 'All', n)"><a href="#">{{n}}</a></li>
-						<li ng-class="{disabled: pagination.numPag != pagination.numElemPag * pagination.numElemTotal}"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-					</ul>
-				</nav>
 			</div>
 		</div>
 	</div>

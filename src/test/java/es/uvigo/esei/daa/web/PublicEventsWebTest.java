@@ -77,7 +77,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 17);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 15);
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 8);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 6);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 4);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
 	}
 
 	@Test
@@ -113,13 +113,35 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 11);
 	}
 	
 	@Test
 	public void testListItem() {
-		verifyXpathCount("//div[contains(@class, 'event-item')]//h4[contains(.,'Gala Goya')]", 1);
-		verifyXpathCount("//div[contains(@class, 'event-item')]//p[contains(@class, 'list-group-item-text')][contains(.,'Wonderful description')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]//h4[contains(.,'Ana y los 7')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]//p[contains(@class, 'list-group-item-text')][contains(.,'capítulo 5 de la serie Ana y los 7')]", 1);
+	}
+	
+	@Test
+	public void testAllEventsInSecondPage(){
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("page2")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 4);
+	}
+	
+	@Test
+	public void testSearchEvent(){
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("search")).sendKeys("Ana y los 7");
+		driver.findElement(By.id("submit-search")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
 	}
 
 	private boolean waitUntilNotFindElement(By by) {

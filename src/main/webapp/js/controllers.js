@@ -54,8 +54,6 @@
 										urlEvents += '&text=' + $scope.text;
 									}
 									
-									//alert(urlEvents);
-									
 									$scope.loading = true;
 									$http.get(urlEvents).success(
 											function(data) {
@@ -69,6 +67,8 @@
 									});
 								};
 								
+								$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
+								
 								$scope.search = function() {
 									$scope.text = $('#search').val();
 									$scope.getEventData($scope.idCategorySelected, $scope.categorySelected, $scope.DEFAULT_PAGE);
@@ -80,17 +80,14 @@
 
 								function geolocFail(categoryId, categoryName) {
 									$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
-									alert("NO SABEMOS POSICION");
 								}
 
-								
 								//setInterval(checkLocation, 3000);
 								
 								$scope.navigator_geolocation = navigator.geolocation;
-								$scope.$watch("navigator_geolocation", function checkLocation(newValue, oldValue) {
-									alert("new: " + newValue + ",old: " + oldValue);
-									
-									if (newValue) {
+								
+								$scope.showPositionalEvents = function(location){
+									if (location) {
 										$scope.navigator_geolocation
 												.getCurrentPosition(
 														function(position) {
@@ -98,8 +95,7 @@
 															$scope.longitude = position.coords.longitude;
 	
 															$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
-														
-															alert("posicion correcta");
+
 														},
 														function(error) {
 															geolocFail();
@@ -107,7 +103,13 @@
 									} else {
 										geolocFail();
 									}
+								}
+								
+								
+								$scope.$watch("navigator_geolocation", function checkLocation(newValue, oldValue) {
+									$scope.showPositionalEvents(newValue);
 								});
+								
 
 								$scope.getCategoryData = function() {
 									$http.get('rest/category').success(
