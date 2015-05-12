@@ -80,23 +80,34 @@
 
 								function geolocFail(categoryId, categoryName) {
 									$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
+									alert("NO SABEMOS POSICION");
 								}
 
-								if (navigator.geolocation) {
-									navigator.geolocation
-											.getCurrentPosition(
-													function(position) {
-														$scope.latitude = position.coords.latitude;
-														$scope.longitude = position.coords.longitude;
-
-														$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
-													},
-													function(error) {
-														geolocFail();
-													});
-								} else {
-									geolocFail();
-								}
+								
+								//setInterval(checkLocation, 3000);
+								
+								$scope.navigator_geolocation = navigator.geolocation;
+								$scope.$watch("navigator_geolocation", function checkLocation(newValue, oldValue) {
+									alert("new: " + newValue + ",old: " + oldValue);
+									
+									if (newValue) {
+										$scope.navigator_geolocation
+												.getCurrentPosition(
+														function(position) {
+															$scope.latitude = position.coords.latitude;
+															$scope.longitude = position.coords.longitude;
+	
+															$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
+														
+															alert("posicion correcta");
+														},
+														function(error) {
+															geolocFail();
+														});
+									} else {
+										geolocFail();
+									}
+								});
 
 								$scope.getCategoryData = function() {
 									$http.get('rest/category').success(
