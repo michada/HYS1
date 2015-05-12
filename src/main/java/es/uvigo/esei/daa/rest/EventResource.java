@@ -14,12 +14,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.uvigo.esei.daa.bean.EventFilterBean;
 import es.uvigo.esei.daa.bean.PagBean;
+import es.uvigo.esei.daa.entities.Event.EventStatus;
 import es.uvigo.esei.daa.entities.Location;
 import es.uvigo.esei.daa.services.FacadeException;
 import es.uvigo.esei.daa.services.PublicFacade;
@@ -32,6 +35,8 @@ import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
 public class EventResource {
 	private final static Logger LOG = Logger.getLogger(EventResource.class
 			.getSimpleName());
+	
+	private final int NUM_ELEMENTS_PER_PAG = 15;
 
 	@Autowired
 	private PublicFacade facade;
@@ -73,10 +78,13 @@ public class EventResource {
 										+ "%")));
 			}
 			
-			eventFilter.getFilters().add(
-					Restrictions.or(Restrictions.eq("status", filters[0]),
-							Restrictions.eq("status", filters[1]),
-							Restrictions.eq("status", filters[2])));
+			if (filters != null) {
+				Disjunction c = Restrictions.or();
+				for (String filter:filters) {
+					c.add(Restrictions.eq("status", EventStatus.valueOf(filter.toUpperCase())));
+				}
+				eventFilter.getFilters().add(c);
+			}
 
 			PagBean pagBean = new PagBean();
 
@@ -86,7 +94,7 @@ public class EventResource {
 				pagBean.setNumPag(0);
 			}
 
-			pagBean.setNumElemPag(1);
+			pagBean.setNumElemPag(NUM_ELEMENTS_PER_PAG);
 
 			List<Object> toret = new ArrayList<Object>();
 			toret.add(pagBean);

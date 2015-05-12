@@ -40,8 +40,7 @@ public class Event implements Serializable, Comparable<Event> {
 	private static final long serialVersionUID = 1L;
 
 	public enum EventStatus {
-		PROGRAMMED, CANCELLED, COMPLETED
-
+		PROGRAMMED, CANCELLED, COMPLETED;
 	}
 
 	public enum Visibility {

@@ -52,17 +52,6 @@ public class PublicFacadeTest extends AbstractTestCase {
 	@After
 	public void tearDown() throws Exception {
 	}
-
-	@Test
-	public void testGetPublicEvents() throws FacadeException {
-		//assertEquals(9, this.facade.getPublicEventList().size());
-
-	}
-	
-	@Test
-	public void testAllEvents() throws FacadeException {
-		//assertEquals(13, this.facade.getAllEventList().size());
-	}
 	
 	@Test
 	public void testGetPublicEventsByCategory() throws FacadeException {

@@ -12,115 +12,98 @@
 							'$scope',
 							'$http',
 							function($scope, $http) {
+								$scope.loading = true;
 								$scope.events = [];
 								$scope.showEvents = {
 									programmed : true,
 									completed : false,
 									cancelled : false
 								};
+								$scope.DEFAULT_PAGE = 1;
+								$scope.DEFAULT_CATEGORY_ID = 0;
+								$scope.DEFAULT_CATEGORY_NAME = 'All';
 								$scope.pagination = [];
 
-								$scope.getEventData = function(latitude,
-										longitude, categoryId, categoryName, page) {
-									categoryId = typeof categoryId !== 'undefined' ? categoryId
-											: 0;
+								$scope.getEventData = function(categoryId, categoryName, page) {
 									$scope.categoryName = typeof categoryName !== 'undefined' ? categoryName
 											: 'All';
 									page = typeof page !== 'undefined' ? page
 											: 1;
-
-									var urlEvents = "";
-									if (!latitude || !longitude) {
-										urlEvents = 'rest/event/' + categoryId + '?page=' + page;
-									} else {
-										urlEvents = 'rest/event/' + categoryId
-												+ '?latitude=' + latitude
-												+ '&longitude=' + longitude
-												+ '&page=' + page;
-										if($scope.showEvents.programmed) {
-											+ '&filters=programmed';
-										}
-										if($scope.showEvents.completed) {
-											+ '&filters=completed';
-										}
-										if($scope.showEvents.cancelled) {
-											+ '&filters=cancelled';
-										}
+									categoryId = typeof categoryId !== 'undefined' ? categoryId
+											: 0;
+									$scope.idCategorySelected = categoryId;
+									$scope.categorySelected = categoryName;
+									
+									var urlEvents = 'rest/event/' + categoryId + '?1=1';
+									if ($scope.latitude && $scope.longitude) {
+										urlEvents += '&latitude=' + $scope.latitude
+												+ '&longitude=' + $scope.longitude;
 									}
-
+									
+									if($scope.showEvents.programmed) {
+										urlEvents += '&filters=programmed';
+									}
+									if($scope.showEvents.completed) {
+										urlEvents += '&filters=completed';
+									}
+									if($scope.showEvents.cancelled) {
+										urlEvents += '&filters=cancelled';
+									}					
+									urlEvents += '&page=' + page;
+									if ($scope.text) {
+										urlEvents += '&text=' + $scope.text;
+									}
+									
+									//alert(urlEvents);
+									
+									$scope.loading = true;
 									$http.get(urlEvents).success(
 											function(data) {
 												$scope.pagination = data[0];
 												$scope.range = buildRange(new Array(),  Math.ceil($scope.pagination.numElemTotal / $scope.pagination.numElemPag));
 												$scope.events = data[1];
+												$scope.loading = false;
 											}).error(function() {
 										alert("Event listing ERROR");
+										$scope.loading = false;
 									});
 								};
+								
+								$scope.search = function() {
+									$scope.text = $('#search').val();
+									$scope.getEventData($scope.idCategorySelected, $scope.categorySelected, $scope.DEFAULT_PAGE);
+								}
+								
+								$scope.paging = function(pag) {
+									$scope.getEventData($scope.idCategorySelected, $scope.categorySelected, pag);
+								}
+
+								function geolocFail(categoryId, categoryName) {
+									$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
+								}
 
 								if (navigator.geolocation) {
-								    var location_timeout = setTimeout(geolocFail, 500);
-
 									navigator.geolocation
 											.getCurrentPosition(
 													function(position) {
-														clearTimeout(location_timeout);
-
 														$scope.latitude = position.coords.latitude;
 														$scope.longitude = position.coords.longitude;
 
-														$scope
-																.getEventData(
-																		$scope.latitude,
-																		$scope.longitude);
+														$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
 													},
 													function(error) {
-														clearTimeout(location_timeout);
 														geolocFail();
 													});
 								} else {
 									geolocFail();
 								}
 
-								function geolocFail(categoryId, categoryName) {
-									$scope.getEventData('', '');
-								}
-
-								$scope.isShown = function(e) {
-									return (e.status == 'COMPLETED' && $scope.showEvents.completed)
-											|| (e.status == 'PROGRAMMED' && $scope.showEvents.programmed)
-											|| (e.status == 'CANCELLED' && $scope.showEvents.cancelled);
-								};
-
 								$scope.getCategoryData = function() {
 									$http.get('rest/category').success(
 											function(data) {
 												$scope.categories = data;
 											}).error(function() {
-										alert("Category listing ERROR");
-									});
-								};
-
-								$scope.search = function(latitude, longitude) {
-									text = $('#search').val();
-
-									var urlEvents = 'rest/event/0';
-									if (latitude && longitude) {
-										urlEvents += '?latitude=' + latitude
-												+ '&longitude=' + longitude
-												+ '&text=' + text;
-									} else {
-										urlEvents += '?text=' + text;
-									}
-
-									$http
-											.get(urlEvents)
-											.success(
-													function(data) {
-														$scope.pagination = data[0];
-														$scope.events = data[1];
-													}).error(function() {
-												alert("Event listing ERROR");
+												alert("Category listing ERROR");
 											});
 								};
 

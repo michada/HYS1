@@ -29,20 +29,27 @@
 	</div>
 	<div class="content-section-a">
 		<div class="container">
-			<div id="products" class="row list-group">
-				<div class="item  col-xs-4 col-lg-4" ng-repeat="e in events | filter: {status: 'PROGRAMMED'} | limitTo : 6">
-					<div class="thumbnail">
-						<img class="group list-group-image"
-							src="http://lorempixel.com/400/250/" alt="" />
-						<div class="caption">
-							<h4 class="group inner list-group-item-heading">{{e.title}}</h4>
-							<p class="group inner list-group-item-text">{{e.description}}</p>
-							<div class="row">
-								<div class="col-xs-12 col-md-6">
-									<p class="lead"><small>{{e.date | date: "MMM d, yyyy 'at' HH:mm"}}</small></p>
-								</div>
-								<div class="col-xs-12 col-md-6">
-									<a class="btn btn-primary" href="#">See details</a>
+			<div ng-show="loading">
+				<div class="event-item item  col-xs-4 col-lg-4" >
+					<img class="img-responsive" src="img/loading.gif" alt="">
+				</div>
+			</div>
+			<div ng-show="!loading">
+				<div id="products" class="row list-group">
+					<div class="item  col-xs-4 col-lg-4" ng-repeat="e in events | filter: {status: 'PROGRAMMED'} | limitTo : 6">
+						<div class="thumbnail">
+							<img class="group list-group-image"
+								src="http://lorempixel.com/400/250/" alt="" />
+							<div class="caption">
+								<h4 class="group inner list-group-item-heading">{{e.title}}</h4>
+								<p class="group inner list-group-item-text">{{e.description}}</p>
+								<div class="row">
+									<div class="col-xs-12 col-md-6">
+										<p class="lead"><small>{{e.date | date: "MMM d, yyyy 'at' HH:mm"}}</small></p>
+									</div>
+									<div class="col-xs-12 col-md-6">
+										<a class="btn btn-primary" href="#">See details</a>
+									</div>
 								</div>
 							</div>
 						</div>
