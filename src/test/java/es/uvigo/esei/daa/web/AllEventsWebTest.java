@@ -78,7 +78,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 13);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 17);
 	}
 	
 	public void testAllListInSecondPage() {
@@ -105,7 +105,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 9);
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 3);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 5);
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 8);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
 	}
 	
 	@Test
@@ -145,7 +145,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		driver.findElement(By.id("search")).sendKeys("Nicolas Cage");
 		driver.findElement(By.id("submit-search")).click();
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
 	}
 	
 	@Test
