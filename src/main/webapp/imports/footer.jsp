@@ -16,5 +16,5 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-cookies.min.js"></script>
-<script src="js/controllers.js"></script>
 <script src="js/script.js"></script>
+<script src="js/controllers.js"></script>

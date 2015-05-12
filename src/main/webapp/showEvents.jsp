@@ -66,13 +66,13 @@
 			</div>
 			<div class="content-section-a">
 					<div ng-show="loading">
-						<div class="event-item item  col-xs-4 col-lg-4" >
+						<div id="loading">
 							<img class="img-responsive" src="img/loading.gif" alt="">
 						</div>
 					</div>
 					<div ng-show="!loading">
 						<div id="products" class="row list-group">
-								<div class="event-item item  col-xs-4 col-lg-4" ng-repeat="e in events">
+								<div class="event-item item  col-xs-4 col-lg-4" ng-repeat="e in events" on-finish-render="ngRepeatFinished">
 									<div class="thumbnail">
 										<img class="group list-group-image"
 											src="http://lorempixel.com/400/250/" alt="" />
