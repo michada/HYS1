@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand topnav" href="#"><i class="fa fa-book fa-fw"></i>&nbsp;Have You Seen?</a>
+            <a class="navbar-brand topnav" href="index.jsp"><i class="fa fa-book fa-fw"></i>&nbsp;Have You Seen?</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">

@@ -77,7 +77,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 9);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 17);
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 8);
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 4);
 	}
 
 	@Test
@@ -113,7 +113,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 6);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
 	}
 	
 	@Test
