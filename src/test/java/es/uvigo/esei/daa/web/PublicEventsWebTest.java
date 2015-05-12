@@ -68,7 +68,7 @@ public class PublicEventsWebTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testAllList() throws Exception {
+	public void testListAll() throws Exception {
 		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.cancelled")).click();
 		driver.findElement(By.id("showEvents.completed")).click();
@@ -135,13 +135,22 @@ public class PublicEventsWebTest extends AbstractTestCase {
 	}
 	
 	@Test
-	public void testSearchEvent(){
+	public void testSearchProgrammedEvent(){
 		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		driver.findElement(By.id("search")).sendKeys("Ana y los 7");
 		driver.findElement(By.id("submit-search")).click();
 		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
+	}
+	
+	@Test
+	public void testListProgrammedEventsAndSetLocation() {
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.switchTo().alert().accept();
+		verifyXpathCount("(//div[contains(@class, 'event-item')])[1]", 1);
 	}
 
 	private boolean waitUntilNotFindElement(By by) {

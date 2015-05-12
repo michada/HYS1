@@ -69,7 +69,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testAllList() {
+	public void testListAll() {
 		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.cancelled")).click();
 		driver.findElement(By.id("showEvents.completed")).click();
@@ -79,20 +79,6 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
 		verifyXpathCount("//div[contains(@class, 'event-item')]", 15);
-	}
-	
-	public void testAllListInSecondPage() {
-		driver.findElement(By.id("dropdown-toggle-filters")).click();
-		driver.findElement(By.id("showEvents.cancelled")).click();
-		driver.findElement(By.id("showEvents.completed")).click();
-		
-		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
-		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
-		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
-		
-		driver.findElement(By.id("page2")).click();
-		
-		verifyXpathCount("//div[contains(@class, 'event-item')]", 3);
 	}
 	
 	@Test
@@ -149,7 +135,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 	}
 	
 	@Test
-	public void testSearchOnlyProgrammedEventsNotFound() {
+	public void testSearchOnlyProgrammedEventsAndNotFound() {
 		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
