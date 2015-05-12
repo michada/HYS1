@@ -77,10 +77,9 @@ public class EventTest extends JerseyTest {
 	}
 
 	@Test
-	public void testList() throws IOException {
+	public void testPublicList() throws IOException {
 
-		final Response response = target("event/0").request().
-				//header("Content-Type", "application/json").acceptEncoding("UTF-8").
+		final Response response = target("event/0?page=1&filters=programmed&filters=cancelled&filters=completed").request().
 				get();
 		assertOkStatus(response);
 		final List<PublicEventPojo> events = response
@@ -91,7 +90,7 @@ public class EventTest extends JerseyTest {
 
 	@Test
 	public void testAllEventList() throws IOException {
-		final WebTarget target = target("event/0");
+		final WebTarget target = target("event/0?page=2&filters=programmed&filters=cancelled&filters=completed");
 		final Response response = target.request()
 				.cookie("token", "T21hcjpMdWNhcw==").get();
 		assertOkStatus(response);
@@ -101,4 +100,39 @@ public class EventTest extends JerseyTest {
 				});
 		assertEquals(13, events.size());
 	}
+	
+	@Test
+	public void testSearchProgrammedPublicEventList() throws IOException {
+		final WebTarget target = target("event/0?text=terror&filters=cancelled&page=1");
+		final Response response = target.request()
+				.get();
+		final List<PublicEventPojo> events = response
+				.readEntity(new GenericType<List<PublicEventPojo>>(){});
+		assertEquals(1, events.size());
+	}
+	
+	@Test
+	public void testSearchProgrammedAndCompletedBookPublicEventList() throws IOException {
+		final WebTarget target = target("event/1?text=xyxy&filters=cancelled&filters=programmed&page=1");
+		final Response response = target.request()
+				.get();
+		final List<PublicEventPojo> events = response
+				.readEntity(new GenericType<List<PublicEventPojo>>(){});
+		assertEquals(1, events.size());
+	}
+	
+	@Test
+	public void testSearchCancelledFilmPublicAndPrivateEventList() throws IOException {
+		final WebTarget target = target("event/2?text=xyxy&filters=cancelled&page=1");
+		final Response response = target.request()
+				.cookie("token", "T21hcjpMdWNhcw==").get();
+		assertOkStatus(response);
+		
+		final List<AllEventPojo> events = response
+				.readEntity(new GenericType<List<AllEventPojo>>() {
+				});
+		assertEquals(1, events.size());
+	}
+	
+
 }

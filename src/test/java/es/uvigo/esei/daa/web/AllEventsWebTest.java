@@ -69,7 +69,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testAllList() throws Exception {
+	public void testAllList() {
 		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.cancelled")).click();
 		driver.findElement(By.id("showEvents.completed")).click();
@@ -79,6 +79,20 @@ public class AllEventsWebTest extends AbstractTestCase {
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
 		verifyXpathCount("//div[contains(@class, 'event-item')]", 13);
+	}
+	
+	public void testAllListInSecondPage() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		
+		driver.findElement(By.id("page2")).click();
+		
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 3);
 	}
 	
 	@Test
@@ -120,6 +134,29 @@ public class AllEventsWebTest extends AbstractTestCase {
 	public void testListItem() {
 		verifyXpathCount("//div[contains(@class, 'event-item')]//h4[contains(.,'Gala Grammy')]", 1);
 		verifyXpathCount("//div[contains(@class, 'event-item')]//p[contains(@class, 'list-group-item-text')][contains(.,'Hall of Fame')]", 1);
+	}
+	
+	//New
+	
+	@Test
+	public void testSearchOnlyProgrammedEvents() {
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("search")).sendKeys("Nicolas Cage");
+		driver.findElement(By.id("submit-search")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
+	}
+	
+	@Test
+	public void testSearchProgrammedAndCompletedEvents() {
+		driver.findElement(By.id("showEvents.completed")).click();
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("search")).sendKeys("Charlie Sheen");
+		driver.findElement(By.id("submit-search")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
 	}
 
 	private boolean waitUntilNotFindElement(By by) {

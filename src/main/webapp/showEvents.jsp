@@ -49,7 +49,7 @@
 						<input type="text" class="form-control" placeholder="Search"
 							id="search">
 					</div>
-					<button type="submit" class="btn btn-primary"
+					<button type="submit" class="btn btn-primary" id="submit-search"
 						ng-click="search(latitude, longitude)">Submit</button>
 				</form>
 			</div>
@@ -93,7 +93,7 @@
 				<nav>
 					<ul class="pagination">
 						<li ng-class="{disabled: pagination.numPag != 1}"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-						<li ng-repeat="n in range" ng-class="{active: pagination.numPag + 1 == n}" ng-click="getEventData(latitude, longitude, 0, 'All', n)"><a href="#">{{n}}</a></li>
+						<li ng-repeat="n in range" id="page{{n}}" ng-class="{active: pagination.numPag + 1 == n}" ng-click="getEventData(latitude, longitude, 0, 'All', n)"><a href="#">{{n}}</a></li>
 						<li ng-class="{disabled: pagination.numPag != pagination.numElemPag * pagination.numElemTotal}"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
 					</ul>
 				</nav>
