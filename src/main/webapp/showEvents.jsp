@@ -55,7 +55,7 @@
 					</div>
 
 					<button type="submit" class="btn btn-primary" id="submit-search"
-						ng-click="search(latitude, longitude)">Submit</button>
+						ng-click="search()">Submit</button>
 				</form>
 			</div>
 			<div class="page-header">
