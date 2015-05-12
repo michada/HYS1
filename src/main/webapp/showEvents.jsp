@@ -73,7 +73,7 @@
 			<div class="content-section-a">
 
 				<div ng-show="loading">
-					<div class="item  col-xs-4 col-lg-4">
+					<div id="loading">
 						<img class="img-responsive" src="img/loading.gif" alt="">
 					</div>
 
