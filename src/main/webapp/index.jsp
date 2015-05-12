@@ -6,13 +6,13 @@
 </head>
 <body ng-controller="eventController">
 	<%@ include file="imports/menu.jsp"%>
-	<div class="intro-header intro-margin">
+	<div class="intro-header intro-margin" ng-show="!loading">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
-					<div class="intro-message">
-						<h1>Have You Seen?</h1>
-						<h3>Meet your next favorite book</h3>
+					<div class="intro-message" ng-repeat="e in events.slice(0, 1) | filter: {status: 'PROGRAMMED'}">
+						<h2>{{e.title}}</h2>
+						<h3>{{e.description}}</h3>
 						<hr class="intro-divider">
 						<ul class="list-inline intro-social-buttons">
 							<li><a href="#" class="btn btn-default btn-lg"><i
@@ -30,13 +30,13 @@
 	<div class="content-section-a">
 		<div class="container">
 			<div ng-show="loading">
-				<div class="event-item item  col-xs-4 col-lg-4" >
+				<div id="loading">
 					<img class="img-responsive" src="img/loading.gif" alt="">
 				</div>
 			</div>
 			<div ng-show="!loading">
 				<div id="products" class="row list-group">
-					<div class="item  col-xs-4 col-lg-4" ng-repeat="e in events | filter: {status: 'PROGRAMMED'} | limitTo : 6">
+					<div class="item  col-xs-4 col-lg-4" ng-repeat="e in events.slice(1, 7) | filter: {status: 'PROGRAMMED'}" on-finish-render="ngRepeatFinished">
 						<div class="thumbnail">
 							<img class="group list-group-image"
 								src="http://lorempixel.com/400/250/" alt="" />

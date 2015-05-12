@@ -4,6 +4,19 @@
 	app.config([ '$sceDelegateProvider', function($sceDelegateProvider) {
 		$sceDelegateProvider.resourceUrlWhitelist([ 'self', '/**' ])
 	} ]);
+	
+    app.directive('onFinishRender', function ($timeout) {
+	    return {
+	        restrict: 'A',
+	        link: function (scope, element, attr) {
+	            if (scope.$last === true) {
+	                $timeout(function () {
+	                    scope.$emit('ngRepeatFinished');
+	                });
+	            }
+	        }
+	    }
+    });
 
 	app
 			.controller(
@@ -24,7 +37,8 @@
 								$scope.DEFAULT_CATEGORY_NAME = 'All';
 								$scope.pagination = [];
 
-								$scope.getEventData = function(categoryId, categoryName, page) {
+								$scope.getEventData = function(categoryId,
+										categoryName, page) {
 									$scope.categoryName = typeof categoryName !== 'undefined' ? categoryName
 											: 'All';
 									page = typeof page !== 'undefined' ? page
@@ -33,29 +47,35 @@
 											: 0;
 									$scope.idCategorySelected = categoryId;
 									$scope.categorySelected = categoryName;
-									
-									var urlEvents = 'rest/event/' + categoryId + '?1=1';
+
+
+									var urlEvents = 'rest/event/' + categoryId
+											+ '?1=1';
 									if ($scope.latitude && $scope.longitude) {
-										urlEvents += '&latitude=' + $scope.latitude
-												+ '&longitude=' + $scope.longitude;
+
+										urlEvents += '&latitude='
+												+ $scope.latitude
+												+ '&longitude='
+												+ $scope.longitude;
 									}
-									
-									if($scope.showEvents.programmed) {
+
+									if ($scope.showEvents.programmed) {
 										urlEvents += '&filters=programmed';
 									}
-									if($scope.showEvents.completed) {
+
+									if ($scope.showEvents.completed) {
 										urlEvents += '&filters=completed';
 									}
-									if($scope.showEvents.cancelled) {
+
+									if ($scope.showEvents.cancelled) {
 										urlEvents += '&filters=cancelled';
-									}					
+
+									}
 									urlEvents += '&page=' + page;
 									if ($scope.text) {
 										urlEvents += '&text=' + $scope.text;
 									}
-									
-									//alert(urlEvents);
-									
+
 									$scope.loading = true;
 									$http.get(urlEvents).success(
 											function(data) {
@@ -63,59 +83,56 @@
 												$scope.range = buildRange(new Array(),  Math.ceil($scope.pagination.numElemTotal / $scope.pagination.numElemPag));
 												$scope.events = data.listEvents;
 												$scope.loading = false;
-											}).error(function() {
-										alert("Event listing ERROR");
-										$scope.loading = false;
-									});
+											});
 								};
-								
+
+
 								$scope.search = function() {
-									$scope.text = $('#search').val();
-									$scope.getEventData($scope.idCategorySelected, $scope.categorySelected, $scope.DEFAULT_PAGE);
+									$scope.text = $('#search').val();									$scope.getEventData(
+											$scope.idCategorySelected,
+											$scope.categorySelected,
+											$scope.DEFAULT_PAGE);
 								}
-								
+
 								$scope.paging = function(pag) {
-									$scope.getEventData($scope.idCategorySelected, $scope.categorySelected, pag);
+									$scope.getEventData(
+											$scope.idCategorySelected,
+											$scope.categorySelected, pag);
 								}
 
 								function geolocFail(categoryId, categoryName) {
-									$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
-									alert("NO SABEMOS POSICION");
+									$scope.getEventData(
+											$scope.DEFAULT_CATEGORY_ID,
+											$scope.DEFAULT_CATEGORY_NAME,
+											$scope.DEFAULT_PAGE);
 								}
 
-								
-								//setInterval(checkLocation, 3000);
-								
-								$scope.navigator_geolocation = navigator.geolocation;
-								$scope.$watch("navigator_geolocation", function checkLocation(newValue, oldValue) {
-									alert("new: " + newValue + ",old: " + oldValue);
-									
-									if (newValue) {
-										$scope.navigator_geolocation
-												.getCurrentPosition(
-														function(position) {
-															$scope.latitude = position.coords.latitude;
-															$scope.longitude = position.coords.longitude;
-	
-															$scope.getEventData($scope.DEFAULT_CATEGORY_ID, $scope.DEFAULT_CATEGORY_NAME, $scope.DEFAULT_PAGE);
-														
-															alert("posicion correcta");
-														},
-														function(error) {
-															geolocFail();
-														});
-									} else {
-										geolocFail();
-									}
-								});
+								if (navigator.geolocation) {
+									navigator.geolocation
+											.getCurrentPosition(
+													function(position) {
+														$scope.latitude = position.coords.latitude;
+														$scope.longitude = position.coords.longitude;
+
+														$scope
+																.getEventData(
+																		$scope.DEFAULT_CATEGORY_ID,
+																		$scope.DEFAULT_CATEGORY_NAME,
+																		$scope.DEFAULT_PAGE);
+													}, function(error) {
+														geolocFail();
+													});
+								} else {
+									geolocFail();
+								}
 
 								$scope.getCategoryData = function() {
 									$http.get('rest/category').success(
 											function(data) {
 												$scope.categories = data;
 											}).error(function() {
-												alert("Category listing ERROR");
-											});
+										alert("Category listing ERROR");
+									});
 								};
 
 								function buildRange(input, total) {
@@ -126,6 +143,10 @@
 								}
 
 								$scope.getCategoryData();
+								
+								$scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+									setSameHeight();
+								});
 							} ]);
 
 	app.controller('loginController', [
