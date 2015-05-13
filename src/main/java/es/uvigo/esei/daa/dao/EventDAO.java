@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,40 +20,31 @@ import es.uvigo.esei.daa.util.LocationUtil;
 
 @Repository
 public class EventDAO extends DAO {
-	private final static Logger LOG = Logger.getLogger(EventDAO.class.getSimpleName());
+	private final static Logger LOG = Logger.getLogger(EventDAO.class
+			.getSimpleName());
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-
 	public List<Event> listEvents(EventFilterBean eventFilterBean,
 			PagBean pagBean) {
 		Session session = sessionFactory.getCurrentSession();
-		
-		// Get the count
-		Criteria criteriaTotal = session.createCriteria(Event.class);
-		// Filters
-		for (Criterion exp:eventFilterBean.getFilters()) {		
-				criteriaTotal.add(exp);
-		}
-		criteriaTotal.setProjection(Projections.rowCount());
-		pagBean.setNumElemTotal((Long)criteriaTotal.uniqueResult());
-		
-		// Get the elements
 		Criteria criteria = session.createCriteria(Event.class)
-				.setFirstResult(pagBean.getFirstElement())
-				.setMaxResults(pagBean.getNumElemPag())
-				.addOrder(Order.asc("date"));
+				.addOrder(Order.asc("date")).setFetchSize(Integer.MAX_VALUE);
 		// Filters
-		for (Criterion exp:eventFilterBean.getFilters()) {		
+		for (Criterion exp : eventFilterBean.getFilters()) {
 			criteria.add(exp);
 		}
-		@SuppressWarnings("unchecked")
 		List<Event> eventList = criteria.list();
+		pagBean.setNumElemTotal(eventList.size());
+
 		if (eventFilterBean.getSrcLocation() != null) {
 			orderByLocationDesc(eventList, eventFilterBean.getSrcLocation());
 		}
-		return eventList;
+
+		int lastElement = pagBean.getFirstElement() + pagBean.getNumElemPag();
+		return eventList.subList(pagBean.getFirstElement(),
+				Math.min(lastElement, eventList.size()));
 	}
 
 	private void orderByLocationDesc(List<Event> eventList, Location srcLocation) {
