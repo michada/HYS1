@@ -2,6 +2,7 @@ package es.uvigo.esei.daa.rest;
 
 import static es.uvigo.esei.daa.TestUtils.assertOkStatus;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,44 +16,26 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.test.context.transaction.BeforeTransaction;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.filter.RequestContextFilter;
 
 import es.uvigo.esei.daa.TestUtils;
 import es.uvigo.esei.daa.services.pojo.AllEventPojo;
+import es.uvigo.esei.daa.services.pojo.AllEventPojoPag;
 import es.uvigo.esei.daa.services.pojo.PublicEventPojo;
+import es.uvigo.esei.daa.services.pojo.PublicEventPojoPag;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
-@TransactionConfiguration(defaultRollback = true)
-@Transactional
 public class EventTest extends JerseyTest {
-	@Autowired
-	private SessionFactory sessionFactory;
-
-	@Autowired
-	TransactionTemplate txTemplate;
-
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		TestUtils.createFakeContext();
 		TestUtils.clearTestDatabase();
 	}
 
-	@BeforeTransaction
+	@Before
 	public void verifyInitialDatabaseState() throws Exception {
 		// logic to verify the initial state before a transaction is started
 		TestUtils.initTestDatabase();
@@ -63,7 +46,7 @@ public class EventTest extends JerseyTest {
 		super.setUp();
 	}
 
-	@AfterTransaction
+	@After
 	public void afterTransaction() throws Exception {
 		TestUtils.clearTestDatabase();
 	}
@@ -78,6 +61,7 @@ public class EventTest extends JerseyTest {
 		ResourceConfig rc = new ResourceConfig();
 
 		rc.register(EventResource.class);
+		rc.register(CategoryResource.class);
 
 		rc.register(RequestContextFilter.class);
 		rc.register(JacksonFeature.class);
@@ -91,30 +75,130 @@ public class EventTest extends JerseyTest {
 	protected void configureClient(ClientConfig config) {
 		super.configureClient(config);
 		config.property("com.sun.jersey.api.json.POJOMappingFeature",
-				Boolean.TRUE);
+				Boolean.TRUE).register(JacksonFeature.class);
 	}
 
 	@Test
-	public void testList() throws IOException {
-		final Response response = target("event").request().get();
+	public void testPublicList() throws IOException {
+		final WebTarget target = target("event").path("0")
+				.queryParam("page", 1).queryParam("filters", "programmed")
+				.queryParam("filters", "cancelled")
+				.queryParam("filters", "completed");
+		final Response response = target.request().get();
 		assertOkStatus(response);
 
-		final List<PublicEventPojo> events = response
-				.readEntity(new GenericType<List<PublicEventPojo>>() {
+		PublicEventPojoPag eventsPag = response
+				.readEntity(new GenericType<PublicEventPojoPag>() {
 				});
-		assertEquals(6, events.size());
+
+		final List<PublicEventPojo> events = eventsPag.getListEvents();
+
+		assertEquals(15, events.size());
+		assertEquals(19, eventsPag.getPageBean().getNumElemTotal());
 	}
 
 	@Test
 	public void testAllEventList() throws IOException {
-		final WebTarget target = target("event");
+		final WebTarget target = target("event").path("0")
+				.queryParam("page", 2).queryParam("filters", "programmed")
+				.queryParam("filters", "cancelled")
+				.queryParam("filters", "completed");
 		final Response response = target.request()
-				.cookie("token", "bXJqYXRvOm1yamF0bw==").get();
+				.cookie("token", "T21hcjpMdWNhcw==").get();
 		assertOkStatus(response);
 
-		final List<AllEventPojo> events = response
-				.readEntity(new GenericType<List<AllEventPojo>>() {
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
 				});
-		assertEquals(8, events.size());
+
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+
+		assertEquals(15, events.size());
+		assertEquals(31, eventsPag.getPageBean().getNumElemTotal());
 	}
+
+	@Test
+	public void testSearchProgrammedPublicEventList() throws IOException {
+		final WebTarget target = target("event").path("0")
+				.queryParam("text", "terror")
+				.queryParam("filters", "cancelled").queryParam("page", 1);
+		final Response response = target.request().get();
+		PublicEventPojoPag eventsPag = response
+				.readEntity(new GenericType<PublicEventPojoPag>() {
+				});
+		final List<PublicEventPojo> events = eventsPag.getListEvents();
+		assertEquals(1, events.size());
+		assertEquals(1, eventsPag.getPageBean().getNumElemTotal());
+	}
+
+	@Test
+	public void testSearchProgrammedAndCompletedBookPublicEventList()
+			throws IOException {
+		final WebTarget target = target("event").path("1")
+				.queryParam("text", "harry").queryParam("filters", "cancelled")
+				.queryParam("filters", "programmed").queryParam("page", 1);
+		final Response response = target.request().get();
+		PublicEventPojoPag eventsPag = response
+				.readEntity(new GenericType<PublicEventPojoPag>() {
+				});
+		final List<PublicEventPojo> events = eventsPag.getListEvents();
+		assertEquals(2, events.size());
+		assertEquals(2, eventsPag.getPageBean().getNumElemTotal());
+	}
+
+	@Test
+	public void testSearchCancelledFilmPublicAndPrivateEventList()
+			throws IOException {
+		final WebTarget target = target("event").path("2")
+				.queryParam("text", "Semana")
+				.queryParam("filters", "cancelled")
+				.queryParam("page", 1);
+		final Response response = target.request()
+				.cookie("token", "T21hcjpMdWNhcw==").get();
+		assertOkStatus(response);
+
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
+				});
+
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+		assertEquals(1, events.size());
+		assertEquals(1, eventsPag.getPageBean().getNumElemTotal());
+	}
+	
+	@Test
+	public void testSearchEventAndNotFound() throws IOException {
+		final WebTarget target = target("event").path("0")
+				.queryParam("text", "NotExistantText")
+				.queryParam("page", 1);
+		final Response response = target.request()
+				.cookie("token", "T21hcjpMdWNhcw==").get();
+		assertOkStatus(response);
+
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
+				});
+
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+		assertTrue(events.isEmpty());
+		assertEquals(0, eventsPag.getPageBean().getNumElemTotal());
+	}
+	
+	@Test
+	public void testListAllProgrammedEventsAndSetLocation() throws IOException {
+		final WebTarget target = target("event").path("0")
+				.queryParam("latitude", "42.335789299999995")
+				.queryParam("longitude", "-7.863880999999998")
+				.queryParam("filters", "programmed")
+				.queryParam("page", 1);
+		final Response response = target.request().get();
+		assertOkStatus(response);
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
+				});
+
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+		assertEquals("Representación de capítulos de Anatomía de Grey", events.get(0).getTitle());
+	}
+
 }

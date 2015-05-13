@@ -2,9 +2,6 @@ package es.uvigo.esei.daa.dao;
 
 import static org.junit.Assert.assertEquals;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +13,9 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
-import es.uvigo.esei.daa.entities.Event;
+import es.uvigo.esei.daa.bean.EventFilterBean;
+import es.uvigo.esei.daa.bean.PagBean;
+import es.uvigo.esei.daa.entities.Location;
 public class EventDAOTest extends AbstractTestCase {
 	@Autowired
 	private EventDAO dao;
@@ -53,12 +52,42 @@ public class EventDAOTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testGetPublicEvents() throws DAOException {
-		assertEquals(6, this.dao.getPublicEvents().size());
+	public void testListEvents() throws DAOException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		assertEquals(5, this.dao.listEvents(
+				eventFilterBean, pagBean).size());
 	}
 	
+	/**
+	 * Check if the number of total elements is such as expected
+	 * @throws DAOException
+	 */
 	@Test
-	public void testAllEvents() throws DAOException {
-		assertEquals(8, this.dao.getAllEvents().size());
+	public void testListEventsNumElemsTotal() throws DAOException {
+		PagBean pagBean = new PagBean();
+		pagBean.setNumElemPag(5);
+		pagBean.setNumPag(0);
+		
+		EventFilterBean eventFilterBean = new EventFilterBean();
+		
+		Location srcLocation = new Location();
+		srcLocation.setLatitude(0.0);
+		srcLocation.setLongitude(0.0);
+		eventFilterBean.setSrcLocation(srcLocation);
+		
+		this.dao.listEvents(
+				eventFilterBean, pagBean);
+		
+		assertEquals(31, pagBean.getNumElemTotal());
 	}
 }

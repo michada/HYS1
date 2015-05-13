@@ -9,20 +9,21 @@ import es.uvigo.esei.daa.entities.Event.Visibility;
 public class AllEventPojo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private int id;
 	private String title;
 	private String description;
 	private Date date;
 	private String status;
 	private int numAssistants;
-	private Visibility visibility;
-	
+	private String visibility;
+	private LocationPojo location;
+	private CategoryPojo category;
 
-	public AllEventPojo(){
-		
+	public AllEventPojo() {
+
 	}
-	
+
 	public AllEventPojo(Event event) {
 		this.id = event.getId();
 		this.title = event.getTitle();
@@ -30,12 +31,27 @@ public class AllEventPojo implements Serializable {
 		this.date = event.getDate();
 		this.status = event.getStatus().toString();
 		this.numAssistants = event.getNumAssistants();
-		this.visibility = event.getVisibility();
-		
-		// Falta visibility
-		// Falta numassitants
+		this.visibility = event.getVisibility().toString();
+		this.location = new LocationPojo(event.getLocation());
+		this.category = new CategoryPojo(event.getCategory());
 	}
-	
+
+	public LocationPojo getLocation() {
+		return location;
+	}
+
+	public void setLocation(LocationPojo location) {
+		this.location = location;
+	}
+
+	public CategoryPojo getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryPojo category) {
+		this.category = category;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -83,12 +99,12 @@ public class AllEventPojo implements Serializable {
 	public void setNumAssistants(int numAssistants) {
 		this.numAssistants = numAssistants;
 	}
-	
-	public Visibility getVisibility() {
+
+	public String getVisibility() {
 		return visibility;
 	}
-	
-	public void setVisibility(Visibility visibility) {
+
+	public void setVisibility(String visibility) {
 		this.visibility = visibility;
 	}
 }

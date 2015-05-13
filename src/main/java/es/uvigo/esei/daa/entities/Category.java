@@ -1,7 +1,5 @@
 package es.uvigo.esei.daa.entities;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -19,27 +17,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-
 @Component
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Entity
-@Table(name="personality")
-public class Personality implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name="category")
+public class Category {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NotNull
 	private String name;
-	private String biography;
-	private Date bornDate;
-	private String image;
-	@OneToMany(mappedBy = "personality")
+	
+	@OneToMany(mappedBy = "category")
 	@JsonManagedReference
-	private List<Event> eventsAboutMe;
+	private List<Event> events;
 
+	public Category(){
+		
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -56,37 +54,14 @@ public class Personality implements Serializable {
 		this.name = name;
 	}
 
-	public String getImage() {
-		return image;
+	public List<Event> getEvents() {
+		return events;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setEvents(List<Event> events) {
+		this.events = events;
 	}
-
-	public String getBiography() {
-		return biography;
-	}
-
-	public void setBiography(String biography) {
-		this.biography = biography;
-	}
-
-	public Date getBornDate() {
-		return bornDate;
-	}
-
-	public void setBornDate(Date bornDate) {
-		this.bornDate = bornDate;
-	}
-
-	public List<Event> getEventsAboutMe() {
-		return eventsAboutMe;
-	}
-
-	public void setEventsAboutMe(List<Event> eventsAboutMe) {
-		this.eventsAboutMe = eventsAboutMe;
-	}
+	
 	
 
 }

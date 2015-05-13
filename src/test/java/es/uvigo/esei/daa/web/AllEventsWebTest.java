@@ -23,7 +23,7 @@ import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
 
 public class AllEventsWebTest extends AbstractTestCase {
-	private static final int DEFAULT_WAIT_TIME = 1;
+	private static final int DEFAULT_WAIT_TIME = 5;
 	private WebDriver driver;
 	private StringBuffer verificationErrors = new StringBuffer();
 	
@@ -48,7 +48,7 @@ public class AllEventsWebTest extends AbstractTestCase {
 		
 		driver = new FirefoxDriver();
 		driver.get(baseUrl);
-		driver.manage().addCookie(new Cookie("token", "bXJqYXRvOm1yamF0bw=="));
+		driver.manage().addCookie(new Cookie("token", "T21hcjpMdWNhcw=="));
 		
 		// Driver will wait DEFAULT_WAIT_TIME if it doesn't find and element.
 		driver.manage().timeouts().implicitlyWait(DEFAULT_WAIT_TIME, TimeUnit.SECONDS);
@@ -69,54 +69,91 @@ public class AllEventsWebTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testAllList() throws Exception {
-		verifyXpathCount("//tr", 8);
+	public void testListAll() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 15);
 	}
 	
 	@Test
 	public void testOnlyCompletedEvents() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.programmed")).click();
 		driver.findElement(By.id("showEvents.completed")).click();
-		driver.findElement(By.id("showEvents.cancelled")).click();
 		
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 2);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 7);
 	}
 
 	@Test
 	public void testOnlyCancelledEvents() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.programmed")).click();
-		//driver.findElement(By.id("showEvents.completed")).click();
-		//driver.findElement(By.id("showEvents.cancelled")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
 		
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 3);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 3);
 	}
 
 	@Test
 	public void testOnlyProgrammedEvents() {
-		//driver.findElement(By.id("showEvents.programmed")).click();
-		//driver.findElement(By.id("showEvents.completed")).click();
-		driver.findElement(By.id("showEvents.cancelled")).click();
-		
 		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 3);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 15);
 	}
 	
 	@Test
 	public void testListItem() {
-		verifyXpathCount("//tr[1][contains(.,'Lacy')]", 1);
-		verifyXpathCount("//tr[1][contains(.,'Howard')]", 1);
-		verifyXpathCount("//tr[1][contains(.,'Dec 9, 2015 at 00:00')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]//h4[contains(.,'Retrospectiva sobre el cine de terror')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]//p[contains(@class, 'list-group-item-text')][contains(.,'Evento cinematográfico sobre las mejores películas de terror hechas en la historia del cine.')]", 1);
+	}
+	
+	@Test
+	public void testAllEventsInThirdPage(){
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("page3")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
+	}
+	
+	@Test
+	public void testSearchOnlyProgrammedEventsAndNotFound() {
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("search")).sendKeys("Nicolas Cage");
+		driver.findElement(By.id("submit-search")).click();
+		verifyXpathCount("//div[contains(@class, 'event-not-found')]", 1);
+	}
+	
+	@Test
+	public void testSearchProgrammedAndCompletedEvents() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("search")).sendKeys("Charlie Sheen");
+		driver.findElement(By.id("submit-search")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
 	}
 
 	private boolean waitUntilNotFindElement(By by) {

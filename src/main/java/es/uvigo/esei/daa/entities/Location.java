@@ -34,28 +34,33 @@ public class Location implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NotNull
-	private String x;
+	private double longitude;
 	@NotNull
-	private String y;
+	private double latitude;
 	
 	@OneToMany(mappedBy="location")
 	@JsonManagedReference
 	private List<Event> events;
 
-	public String getX() {
-		return x;
+	
+	public Location(){
+		
+	}
+	
+	public double getLongitude() {
+		return longitude;
 	}
 
-	public void setX(String x) {
-		this.x = x;
+	public void setLongitude(double x) {
+		this.longitude = x;
 	}
 
-	public String getY() {
-		return y;
+	public double getLatitude() {
+		return latitude;
 	}
 
-	public void setY(String y) {
-		this.y = y;
+	public void setLatitude(double y) {
+		this.latitude = y;
 	}
 
 	public int getId() {

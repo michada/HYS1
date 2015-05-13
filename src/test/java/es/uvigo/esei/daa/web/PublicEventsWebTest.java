@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -22,8 +21,9 @@ import org.springframework.test.context.transaction.BeforeTransaction;
 import es.uvigo.esei.daa.AbstractTestCase;
 import es.uvigo.esei.daa.TestUtils;
 
+
 public class PublicEventsWebTest extends AbstractTestCase {
-	private static final int DEFAULT_WAIT_TIME = 1;
+	private static final int DEFAULT_WAIT_TIME = 2;
 	private WebDriver driver;
 	private StringBuffer verificationErrors = new StringBuffer();
 	
@@ -48,7 +48,6 @@ public class PublicEventsWebTest extends AbstractTestCase {
 		
 		driver = new FirefoxDriver();
 		driver.get(baseUrl);
-		//driver.manage().addCookie(new Cookie("token", "bXJqYXRvOm1yamF0bw=="));
 		
 		// Driver will wait DEFAULT_WAIT_TIME if it doesn't find and element.
 		driver.manage().timeouts().implicitlyWait(DEFAULT_WAIT_TIME, TimeUnit.SECONDS);
@@ -69,54 +68,80 @@ public class PublicEventsWebTest extends AbstractTestCase {
 	}
 
 	@Test
-	public void testAllList() throws Exception {
-		verifyXpathCount("//tr", 6);
+	public void testListAll() throws Exception {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 15);
 	}
 	
 	@Test
 	public void testOnlyCompletedEvents() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.programmed")).click();
 		driver.findElement(By.id("showEvents.completed")).click();
-		driver.findElement(By.id("showEvents.cancelled")).click();
 		
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 2);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 6);
 	}
 
 	@Test
 	public void testOnlyCancelledEvents() {
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
 		driver.findElement(By.id("showEvents.programmed")).click();
-		//driver.findElement(By.id("showEvents.completed")).click();
-		//driver.findElement(By.id("showEvents.cancelled")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
 		
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 2);
 	}
 
 	@Test
 	public void testOnlyProgrammedEvents() {
-		//driver.findElement(By.id("showEvents.programmed")).click();
-		//driver.findElement(By.id("showEvents.completed")).click();
-		driver.findElement(By.id("showEvents.cancelled")).click();
 		
 		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
 		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
 		
-		verifyXpathCount("//tr[@class='ng-scope']", 3);
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 11);
 	}
 	
 	@Test
 	public void testListItem() {
-		verifyXpathCount("//tr[1][contains(.,'Lacy')]", 1);
-		verifyXpathCount("//tr[1][contains(.,'Howard')]", 1);
-		verifyXpathCount("//tr[1][contains(.,'Dec 9, 2015 at 00:00')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]//h4[contains(.,'Ana y los 7')]", 1);
+		verifyXpathCount("//div[contains(@class, 'event-item')]//p[contains(@class, 'list-group-item-text')][contains(.,'capítulo 5 de la serie Ana y los 7')]", 1);
+	}
+	
+	@Test
+	public void testAllEventsInSecondPage(){
+		driver.findElement(By.id("dropdown-toggle-filters")).click();
+		driver.findElement(By.id("showEvents.completed")).click();
+		driver.findElement(By.id("showEvents.cancelled")).click();
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(true, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("page2")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 4);
+	}
+	
+	@Test
+	public void testSearchProgrammedEvent(){
+		assertEquals(true, driver.findElement(By.id("showEvents.programmed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.completed")).isSelected());
+		assertEquals(false, driver.findElement(By.id("showEvents.cancelled")).isSelected());
+		driver.findElement(By.id("search")).sendKeys("Ana y los 7");
+		driver.findElement(By.id("submit-search")).click();
+		verifyXpathCount("//div[contains(@class, 'event-item')]", 1);
 	}
 
 	private boolean waitUntilNotFindElement(By by) {

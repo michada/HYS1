@@ -29,20 +29,16 @@ public class UsersDAO extends DAO {
 						final String shaPassword = encodeSha256(password);
 						
 						if (shaPassword.equals(dbPassword)) {
-							System.out.println("BIEN!!!");
 							return encodeBase64(login + ":" + password);
 						} else {
-							System.out.println("MAL!!!");
 							return null;
 						}
 					} else {
-						System.out.println("FATAL!!!");
 						return null;
 					}
 				}
 			}
 		} catch (SQLException e) {
-			System.out.println("EXCEPCION!!!");
 			LOG.log(Level.SEVERE, "Error checking login", e);
 			throw new DAOException(e);
 		}
