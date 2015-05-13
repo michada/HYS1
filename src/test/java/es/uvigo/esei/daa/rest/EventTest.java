@@ -2,6 +2,7 @@ package es.uvigo.esei.daa.rest;
 
 import static es.uvigo.esei.daa.TestUtils.assertOkStatus;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -163,6 +164,41 @@ public class EventTest extends JerseyTest {
 		final List<AllEventPojo> events = eventsPag.getListEvents();
 		assertEquals(1, events.size());
 		assertEquals(1, eventsPag.getPageBean().getNumElemTotal());
+	}
+	
+	@Test
+	public void testSearchEventAndNotFound() throws IOException {
+		final WebTarget target = target("event").path("0")
+				.queryParam("text", "NotExistantText")
+				.queryParam("page", 1);
+		final Response response = target.request()
+				.cookie("token", "T21hcjpMdWNhcw==").get();
+		assertOkStatus(response);
+
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
+				});
+
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+		assertTrue(events.isEmpty());
+		assertEquals(0, eventsPag.getPageBean().getNumElemTotal());
+	}
+	
+	@Test
+	public void testListAllProgrammedEventsAndSetLocation() throws IOException {
+		final WebTarget target = target("event").path("0")
+				.queryParam("latitude", "42.335789299999995")
+				.queryParam("longitude", "-7.863880999999998")
+				.queryParam("filters", "programmed")
+				.queryParam("page", 1);
+		final Response response = target.request().get();
+		assertOkStatus(response);
+		AllEventPojoPag eventsPag = response
+				.readEntity(new GenericType<AllEventPojoPag>() {
+				});
+
+		final List<AllEventPojo> events = eventsPag.getListEvents();
+		assertEquals("Representación de capítulos de Anatomía de Grey", events.get(0).getTitle());
 	}
 
 }
